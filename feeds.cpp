@@ -107,6 +107,8 @@ int Feeds::rowCount(const QModelIndex &parent) const
 QVariant Feeds::data(const QModelIndex &index, int role) const
 {
     switch(role) {
+    case RoleId:
+        return m_list.at(index.row()).id;
     case RoleTitle:
         return m_list.at(index.row()).title;
     case RoleIsFolder:
@@ -121,6 +123,7 @@ QHash<int, QByteArray> Feeds::roleNames() const
     QHash<int, QByteArray> roles;
     roles.insert(RoleTitle, "title");
     roles.insert(RoleIsFolder, "isFolder");
+	roles.insert(RoleId, "id");
     return roles;
 }
 
