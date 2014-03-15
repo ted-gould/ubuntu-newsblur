@@ -15,14 +15,16 @@ Page {
             filterPath: folderPath
         }
 
-        delegate: Subtitled {
+        delegate: Standard {
             text: title
-            progression: isFolder
+            progression: true
 
             onClicked: {
                 if (isFolder) {
-                    pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {folderPath: root.folderPath + '/' + title})
-                }
+                    pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {folderPath: root.folderPath + '/' + title, title: title})
+                } else {
+                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: id, title: title})
+				}
             }
         }
     }
