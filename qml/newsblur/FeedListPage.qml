@@ -7,23 +7,22 @@ Page {
     id: root
     title: "NewsBlur"
 
-    property string feedId
+    property int feedId
 
     ListView {
         anchors.fill: parent
-		/*
-        model: Feeds {
-            filterPath: folderPath
+
+        model: Stories {
+            feedId: root.feedId
         }
 
         delegate: Subtitled {
             text: title
-            progression: isFolder
+            progression: true
 
             onClicked: {
             }
         }
-		*/
     }
 
 }
