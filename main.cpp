@@ -1,5 +1,6 @@
 #include "newsblurconnection.h"
 #include "feeds.h"
+#include "stories.h"
 
 #include "qtquick2applicationviewer.h"
 
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
 
     qmlRegisterSingletonType<NewsBlurConnection>("NewsBlur", 0, 1, "NewsBlur", connectionInstance);
     qmlRegisterType<Feeds>("NewsBlur", 0, 1, "Feeds");
+    qmlRegisterType<Stories>("NewsBlur", 0, 1, "Stories");
 
     QtQuick2ApplicationViewer viewer;
     viewer.setMainQmlFile(QStringLiteral("qml/newsblur/main.qml"));

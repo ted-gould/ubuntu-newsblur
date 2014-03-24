@@ -146,3 +146,36 @@ QVariant NewsBlurConnection::feedsData() const
 {
     return m_feedsData;
 }
+
+void NewsBlurConnection::feedEntries(int feedId)
+{
+	qDebug() << "getting results for feed " << feedId;
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(QString("http://newsblur.com/reader/feed/") + feedId));
+
+    QNetworkReply *reply = m_nam->get(request);
+    connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedEntriesFetched);
+}
+
+void NewsBlurConnection::feedEntriesFetched()
+{
+    qDebug() << "got feed entries reply";
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Error fetching feed entries" << reply->errorString();
+        return;
+    }
+
+    QJsonParseError error;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll(), &error);
+    if (error.error != QJsonParseError::NoError) {
+        qWarning() << "Error parsing feed entries" << error.errorString();
+        return;
+    }
+
+    QVariant feedEntriesData = jsonDoc.toVariant();
+	qDebug() << "Entries: " << feedEntriesData;
+
+    emit entriesFetched(feedEntriesData);
+}

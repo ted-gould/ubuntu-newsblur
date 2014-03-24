@@ -27,11 +27,13 @@ public slots:
     void createUser(const QString &username, const QString &email, const QString &password = QString());
     void login(const QString &username, const QString &password = QString());
     void fetchFeeds();
+	void feedEntries(int feedId);
 
 private slots:
     void userCreated();
     void loggedIn();
     void feedsFetched();
+    void feedEntriesFetched();
 
 private:
     explicit NewsBlurConnection(QObject *parent = 0);
@@ -41,6 +43,7 @@ signals:
     void usernameChanged();
     void authenticatedChanged();
     void feedsUpdated(const QVariant &feedsData);
+    void entriesFetched(const QVariant &entriesData);
 
 private:
     QNetworkAccessManager *m_nam;

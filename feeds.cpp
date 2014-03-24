@@ -99,7 +99,7 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
 }
 
 
-int Feeds::rowCount(const QModelIndex &parent) const
+int Feeds::rowCount(const QModelIndex & /*parent*/) const
 {
     return m_list.count();
 }
