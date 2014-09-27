@@ -7,9 +7,13 @@ MainView {
     width: units.gu(40)
     height: units.gu(70)
 
+    automaticOrientation: true
+    useDeprecatedToolbar: false
+    applicationName: "cx.gould.ted.newsblur"
+
     Component.onCompleted: {
         pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"))
-        NewsBlur.login("mzanetti")
+        NewsBlur.login("tedgould")
     }
 
     PageStack {
