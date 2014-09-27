@@ -85,13 +85,22 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
             entry.id = feedId;
             entry.title = feeds.value(QString::number(feedId)).toMap().value("feed_title").toString();
             entry.isFolder = false;
-            m_list.append(entry);
+            if (entry.title != "") {
+                m_list.append(entry);
+                qDebug() << "Feed (" << feedId << "):" << entry.title;
+            } else {
+                qDebug() << "Feed (" << feedId << "): Skipping empty title";
+            }
         } else {
             Entry entry;
             entry.title = folderListEntry.toMap().keys().first();
             entry.isFolder = true;
 
-            m_list.append(entry);
+            if (entry.title != "") {
+                m_list.append(entry);
+            } else {
+                qDebug() << "Feed (" << feedId << "): Skipping empty title";
+            }
         }
     }
 
@@ -123,7 +132,7 @@ QHash<int, QByteArray> Feeds::roleNames() const
     QHash<int, QByteArray> roles;
     roles.insert(RoleTitle, "title");
     roles.insert(RoleIsFolder, "isFolder");
-	roles.insert(RoleId, "id");
+    roles.insert(RoleId, "id");
     return roles;
 }
 
