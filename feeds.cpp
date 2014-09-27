@@ -70,6 +70,11 @@ QVariantList Feeds::findNode(const QVariantList &folders, const QString &path)
     return QVariantList();
 }
 
+bool EntryCompare (const Entry& a, const Entry& b)
+{
+	return a.title < b.title;
+}
+
 void Feeds::updateFromFolderNode(const QVariantList &folderNode)
 {
     beginResetModel();
@@ -103,6 +108,8 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
             }
         }
     }
+
+	qSort(m_list.begin(), m_list.end(), EntryCompare);
 
     endResetModel();
 }
