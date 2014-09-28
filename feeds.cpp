@@ -98,6 +98,7 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
             }
         } else {
             Entry entry;
+            entry.id = feedId;
             entry.title = folderListEntry.toMap().keys().first();
             entry.isFolder = true;
 
@@ -139,7 +140,7 @@ QHash<int, QByteArray> Feeds::roleNames() const
     QHash<int, QByteArray> roles;
     roles.insert(RoleTitle, "title");
     roles.insert(RoleIsFolder, "isFolder");
-    roles.insert(RoleId, "id");
+    roles.insert(RoleId, "feedId");
     return roles;
 }
 

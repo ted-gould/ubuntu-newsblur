@@ -23,8 +23,9 @@ Page {
                 if (isFolder) {
                     pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {folderPath: root.folderPath + '/' + title, title: title})
                 } else {
-                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: id, title: title})
-				}
+                    console.log("Clicking on feed list '" + feedId + "': " + title);
+                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: title})
+                }
             }
         }
     }

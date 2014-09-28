@@ -7,7 +7,7 @@
 
 class Entry {
 public:
-    QString id;
+    int id;
     QString title;
     bool isFolder;
 };
