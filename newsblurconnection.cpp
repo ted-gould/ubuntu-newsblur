@@ -149,10 +149,12 @@ QVariant NewsBlurConnection::feedsData() const
 
 void NewsBlurConnection::feedEntries(int feedId)
 {
-	qDebug() << "getting results for feed " << feedId;
+    qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    request.setUrl(QUrl(QString("http://newsblur.com/reader/feed/") + feedId));
+    QString url = QString("http://newsblur.com/reader/feed/%1").arg(feedId);
+    qDebug() << "feed url: " << url;
+    request.setUrl(QUrl(url));
 
     QNetworkReply *reply = m_nam->get(request);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedEntriesFetched);
@@ -175,7 +177,6 @@ void NewsBlurConnection::feedEntriesFetched()
     }
 
     QVariant feedEntriesData = jsonDoc.toVariant();
-	qDebug() << "Entries: " << feedEntriesData;
 
     emit entriesFetched(feedEntriesData);
 }
