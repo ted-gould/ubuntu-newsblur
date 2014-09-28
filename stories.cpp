@@ -19,12 +19,12 @@ void Stories::componentComplete()
 void Stories::entriesFetched(const QVariant &entriesData)
 {
     qDebug() << "feeds updated";
-	m_storyData = entriesData.toHash();
-	/* TODO: Parse data */
+    m_storyData = entriesData.toHash();
+    /* TODO: Parse data */
 }
 
 void Stories::refresh() {
-	NewsBlurConnection::instance()->feedEntries(m_feedId);
+    NewsBlurConnection::instance()->feedEntries(m_feedId);
 }
 
 int Stories::rowCount(const QModelIndex & /*parent*/) const
@@ -48,7 +48,7 @@ QHash<int, QByteArray> Stories::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles.insert(RoleTitle, "title");
-	roles.insert(RoleId, "id");
+    roles.insert(RoleId, "storyId");
     return roles;
 }
 
@@ -59,6 +59,7 @@ int Stories::feedId() const
 
 void Stories::setFeedId(int feedId)
 {
+    qDebug() << "Story model created for feed:"<< feedId;
     if (m_feedId != feedId) {
         m_feedId = feedId;
         emit feedIdChanged();
