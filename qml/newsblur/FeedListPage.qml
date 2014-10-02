@@ -21,6 +21,7 @@ Page {
             progression: true
 
             onClicked: {
+                 pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: title, storyLink: link, storyContent: content});
             }
         }
     }
