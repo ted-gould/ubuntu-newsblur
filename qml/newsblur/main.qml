@@ -13,7 +13,7 @@ MainView {
 
     Component.onCompleted: {
         pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"))
-        NewsBlur.login("tedgould")
+        NewsBlur.login("testuser")
     }
 
     PageStack {
