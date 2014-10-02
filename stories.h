@@ -57,7 +57,6 @@ private:
 private:
     QList<StoryEntry> m_list;
     int m_feedId;
-    QVariantList m_storyData;
 };
 
 #endif // ENTRIES_H

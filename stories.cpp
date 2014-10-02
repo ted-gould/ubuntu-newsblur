@@ -13,7 +13,6 @@ Stories::Stories(QObject *parent) :
 
 void Stories::componentComplete()
 {
-    refresh();
 }
 
 void Stories::entriesFetched(const QVariant &entriesData)
@@ -23,9 +22,9 @@ void Stories::entriesFetched(const QVariant &entriesData)
     m_list.clear();
 
     qDebug() << "feeds updated";
-    m_storyData = entriesData.toHash()["stories"].toList();
+    QVariantList storyData = entriesData.toMap()["stories"].toList();
 
-    foreach (const QVariant &story, m_storyData) {
+    foreach (const QVariant &story, storyData) {
         QVariantMap storymap = story.toMap();
         StoryEntry entry;
 
@@ -37,6 +36,8 @@ void Stories::entriesFetched(const QVariant &entriesData)
 
         m_list.append(entry);
     }
+
+    qDebug() << "Got" << m_list.count() << "stories for feed" << m_feedId;
 
     endResetModel();
 }
