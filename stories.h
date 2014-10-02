@@ -3,12 +3,16 @@
 
 #include <QAbstractListModel>
 #include <QQmlParserStatus>
+#include <QDate>
 
 
 class StoryEntry {
 public:
-    QString id;
     QString title;
+    QString hash;
+    QString content;
+    QString link;
+    QString timestamp;
 };
 
 class Stories : public QAbstractListModel, public QQmlParserStatus
@@ -19,8 +23,11 @@ class Stories : public QAbstractListModel, public QQmlParserStatus
 
 public:
     enum Roles {
-        RoleId,
-        RoleTitle
+        RoleTitle,
+        RoleHash,
+        RoleContent,
+        RoleLink,
+        RoleTimestamp
     };
 
     explicit Stories(QObject *parent = 0);
@@ -50,7 +57,7 @@ private:
 private:
     QList<StoryEntry> m_list;
     int m_feedId;
-	QHash<QString, QVariant> m_storyData;
+    QVariantList m_storyData;
 };
 
 #endif // ENTRIES_H
