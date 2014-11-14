@@ -1,0 +1,15 @@
+Makefile
+feeds.o
+main.o
+moc_feeds.cpp
+moc_feeds.o
+moc_newsblurconnection.cpp
+moc_newsblurconnection.o
+moc_qtquick2applicationviewer.cpp
+moc_qtquick2applicationviewer.o
+moc_stories.cpp
+moc_stories.o
+newsblur
+newsblurconnection.o
+qtquick2applicationviewer.o
+stories.o
