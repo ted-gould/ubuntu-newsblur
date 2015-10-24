@@ -16,7 +16,7 @@ Page {
 		docId: 'child-opened-' + title
 		create: true
 		defaults: {
-			"childSelected": 0
+			"childSelected": "None"
 		}
 	}
 
@@ -32,8 +32,7 @@ Page {
             progression: true
 
             onClicked: {
-				console.log("Current selected: " + childOpened.contents["childSelected"])
-				childOpened.contents["childSelected"] = feedId
+				settingsDatabase.putDoc({"childSelected": title}, 'child-opened-' + root.title)
 
                 if (isFolder) {
                     pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
@@ -49,10 +48,11 @@ Page {
     }
 
 	Component.onCompleted: {
-		if (childOpened.childSelected != 0) {
-			travelid = childOpened.childSelected
-			for (i = 0; i < feedModel.rowCount(); i++) {
-				if (feedModel[i].feedId == travelid) {
+		if (childOpened.contents["childSelected"] != "None") {
+			var travelid = childOpened.contents["childSelected"]
+			console.log("Restoring to: " + travelid)
+			for (var i = 0; i < feedModel.rowCount; i++) {
+				if (feedModel[i].title == travelid) {
 					if (feedModel[i].isFolder) {
 						pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
 							folderPath: root.folderPath + '/' + feedModel[i].title,
