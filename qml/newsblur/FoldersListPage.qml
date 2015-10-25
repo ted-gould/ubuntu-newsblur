@@ -61,6 +61,15 @@ Page {
 		}
 	]
 
+	Connections {
+		target: pageStack
+		onDepthChanged: {
+			if (pageStack.currentPage == root) {
+				settingsDatabase.putDoc({"childSelected": "None"}, 'child-opened-' + root.title)
+			}
+		}
+	}
+
     ListView {
         anchors.fill: parent
         model: Feeds {
