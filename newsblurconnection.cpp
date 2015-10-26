@@ -135,9 +135,7 @@ void NewsBlurConnection::feedsFetched()
         return;
     }
 
-    m_feedsData = jsonDoc.toVariant();
-
-	qDebug() << "Feeds Data:" << jsonDoc;
+	m_feedsData = jsonDoc.toVariant();
 
     emit feedsUpdated(m_feedsData);
 }
@@ -147,12 +145,12 @@ QVariant NewsBlurConnection::feedsData() const
     return m_feedsData;
 }
 
-void NewsBlurConnection::feedEntries(int feedId)
+void NewsBlurConnection::feedEntries(int feedId, int page)
 {
     qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/feed/%1").arg(feedId);
+    QString url = QString("https://newsblur.com/reader/feed/%1?page=%2&read_filter=unread").arg(feedId).arg(page);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 
@@ -177,6 +175,8 @@ void NewsBlurConnection::feedEntriesFetched()
     }
 
     QVariant feedEntriesData = jsonDoc.toVariant();
+
+	qDebug() << "Entries Data: " << jsonDoc;
 
     emit entriesFetched(feedEntriesData);
 }

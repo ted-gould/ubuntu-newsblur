@@ -27,7 +27,7 @@ public slots:
     void createUser(const QString &username, const QString &email, const QString &password = QString());
     void login(const QString &username, const QString &password = QString());
     void fetchFeeds();
-	void feedEntries(int feedId);
+	void feedEntries(int feedId, int page = 1);
 
 private slots:
     void userCreated();

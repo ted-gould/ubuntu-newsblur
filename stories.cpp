@@ -17,9 +17,12 @@ void Stories::componentComplete()
 
 void Stories::entriesFetched(const QVariant &entriesData)
 {
-    beginResetModel();
+	if (entriesData.toMap()["feed_id"].toInt() != m_feedId) {
+		qDebug() << "Feed Data Not for us. Expecting" << m_feedId << "but got" << entriesData.toMap()["feed_id"].toInt();
+		return;
+	}
 
-    m_list.clear();
+    beginResetModel();
 
     qDebug() << "feeds updated";
     QVariantList storyData = entriesData.toMap()["stories"].toList();
@@ -34,16 +37,21 @@ void Stories::entriesFetched(const QVariant &entriesData)
         entry.hash = storymap["story_hash"].toString();
         entry.timestamp = storymap["story_data"].toString();
 
-        m_list.append(entry);
+		if (storymap["read_status"].toInt() == 0)
+			m_list.append(entry);
     }
 
     qDebug() << "Got" << m_list.count() << "stories for feed" << m_feedId;
 
     endResetModel();
+
+	if (storyData.count() != 0 || entriesData.toMap()["hidden_stories_removed"].toInt() != 0) {
+		NewsBlurConnection::instance()->feedEntries(m_feedId, ++m_page);
+	}
 }
 
 void Stories::refresh() {
-    NewsBlurConnection::instance()->feedEntries(m_feedId);
+    NewsBlurConnection::instance()->feedEntries(m_feedId, m_page);
 }
 
 int Stories::rowCount(const QModelIndex & /*parent*/) const
@@ -90,6 +98,8 @@ void Stories::setFeedId(int feedId)
     qDebug() << "Story model created for feed:"<< feedId;
     if (m_feedId != feedId) {
         m_feedId = feedId;
+		m_list.clear();
+		m_page = 1;
         emit feedIdChanged();
         refresh();
     }
