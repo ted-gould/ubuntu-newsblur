@@ -81,8 +81,9 @@ Page {
         }
 
         delegate: Standard {
-            text: title
+            text: isFolder ? title : title + " (" + unread + ")"
             progression: true
+			visible: isFolder || unread > 0
 
             onClicked: {
 				settingsDatabase.putDoc({"childSelected": title}, childOpened.docId)

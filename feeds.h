@@ -10,6 +10,7 @@ public:
     int id;
     QString title;
     bool isFolder;
+	int unread;
 };
 
 class Feeds : public QAbstractListModel, public QQmlParserStatus
@@ -22,7 +23,8 @@ public:
     enum Roles {
         RoleId,
         RoleTitle,
-        RoleIsFolder
+        RoleIsFolder,
+		RoleUnread
     };
 
     explicit Feeds(QObject *parent = 0);

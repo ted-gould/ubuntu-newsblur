@@ -102,8 +102,6 @@ void NewsBlurConnection::loggedIn()
     if (jsonDoc.toVariant().toMap().value("authenticated").toBool()) {
         qDebug() << "logged in!";
         m_authenticated = true;
-    } else {
-        m_authenticated = false;
     }
     fetchFeeds();
     emit authenticatedChanged();
@@ -138,6 +136,8 @@ void NewsBlurConnection::feedsFetched()
     }
 
     m_feedsData = jsonDoc.toVariant();
+
+	qDebug() << "Feeds Data:" << jsonDoc;
 
     emit feedsUpdated(m_feedsData);
 }

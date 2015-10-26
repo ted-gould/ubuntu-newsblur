@@ -90,6 +90,7 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
             entry.id = feedId;
             entry.title = feeds.value(QString::number(feedId)).toMap().value("feed_title").toString();
             entry.isFolder = false;
+			entry.unread = feeds.value(QString::number(feedId)).toMap().value("nt").toInt();
             if (entry.title != "") {
                 m_list.append(entry);
                 qDebug() << "Feed (" << feedId << "):" << entry.title;
@@ -101,6 +102,7 @@ void Feeds::updateFromFolderNode(const QVariantList &folderNode)
             entry.id = feedId;
             entry.title = folderListEntry.toMap().keys().first();
             entry.isFolder = true;
+			entry.unread = 0;
 
             if (entry.title != "") {
                 m_list.append(entry);
@@ -130,6 +132,8 @@ QVariant Feeds::data(const QModelIndex &index, int role) const
         return m_list.at(index.row()).title;
     case RoleIsFolder:
         return m_list.at(index.row()).isFolder;
+    case RoleUnread:
+        return m_list.at(index.row()).unread;
     }
 
     return QVariant();
@@ -141,6 +145,7 @@ QHash<int, QByteArray> Feeds::roleNames() const
     roles.insert(RoleTitle, "title");
     roles.insert(RoleIsFolder, "isFolder");
     roles.insert(RoleId, "feedId");
+    roles.insert(RoleUnread, "unread");
     return roles;
 }
 
