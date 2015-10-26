@@ -180,3 +180,14 @@ void NewsBlurConnection::feedEntriesFetched()
 
     emit entriesFetched(feedEntriesData);
 }
+
+void NewsBlurConnection::markStoryHashRead(const QString &hash)
+{
+    QNetworkRequest request;
+    QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
+    qDebug() << "feed url: " << url;
+    request.setUrl(QUrl(url));
+
+	QByteArray data;
+    m_nam->post(request, data);
+}

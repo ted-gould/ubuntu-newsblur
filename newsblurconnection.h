@@ -28,6 +28,7 @@ public slots:
     void login(const QString &username, const QString &password = QString());
     void fetchFeeds();
 	void feedEntries(int feedId, int page = 1);
+	void markStoryHashRead (const QString &hash);
 
 private slots:
     void userCreated();
