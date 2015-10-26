@@ -42,7 +42,7 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
 
     if (!m_username.isEmpty() && !m_authenticated) {
         QNetworkRequest request;
-        request.setUrl(QUrl("http://newsblur.com/api/login"));
+        request.setUrl(QUrl("https://newsblur.com/api/login"));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
         QByteArray postData;
@@ -59,7 +59,7 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
 void NewsBlurConnection::createUser(const QString &username, const QString &email, const QString &password)
 {
     QNetworkRequest request;
-    request.setUrl(QUrl("http://newsblur.com/api/signup"));
+    request.setUrl(QUrl("https://newsblur.com/api/signup"));
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -113,7 +113,7 @@ void NewsBlurConnection::fetchFeeds()
 {
     qDebug() << "fetching feeds...";
     QNetworkRequest request;
-    request.setUrl(QUrl("http://newsblur.com/reader/feeds"));
+    request.setUrl(QUrl("https://newsblur.com/reader/feeds"));
 
 //    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -152,7 +152,7 @@ void NewsBlurConnection::feedEntries(int feedId)
     qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    QString url = QString("http://newsblur.com/reader/feed/%1").arg(feedId);
+    QString url = QString("https://newsblur.com/reader/feed/%1").arg(feedId);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 
