@@ -10,11 +10,12 @@ Page {
     title: "NewsBlur"
 
     property string folderPath
+	property bool itemsInit: false
 
 	U1db.Document {
 		id: childOpened
 		database: settingsDatabase
-		docId: 'child-opened-' + title
+		docId: 'child-opened-' + title.replace(/\W/g, '-')
 		create: true
 		defaults: {
 			"childSelected": "None"
@@ -63,9 +64,10 @@ Page {
 
 	Connections {
 		target: pageStack
-		onDepthChanged: {
-			if (pageStack.currentPage == root) {
-				settingsDatabase.putDoc({"childSelected": "None"}, 'child-opened-' + root.title)
+		onCurrentPageChanged: {
+			if (itemsInit && pageStack.currentPage == root) {
+				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + root.title + "'")
+				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
 			}
 		}
 	}
@@ -83,7 +85,7 @@ Page {
             progression: true
 
             onClicked: {
-				settingsDatabase.putDoc({"childSelected": title}, 'child-opened-' + root.title)
+				settingsDatabase.putDoc({"childSelected": title}, childOpened.docId)
 
                 if (isFolder) {
                     pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
@@ -97,6 +99,7 @@ Page {
             }
 			
 			Component.onCompleted: {
+				itemsInit = true
 				if (childOpened.contents["childSelected"] == title) {
 					if (isFolder) {
 						pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
