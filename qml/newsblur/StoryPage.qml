@@ -13,6 +13,15 @@ Page {
 
 	title: storyTitle
 
+	head.actions: [
+		Action {
+			id: openExternally
+			text: "Open"
+			iconName: "account"
+			onTriggered: Qt.openUrl(storyLink)
+		}
+	]
+
 	WebView {
 		anchors.fill: parent
 		Component.onCompleted: loadHtml(story.storyContent)

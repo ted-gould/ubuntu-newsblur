@@ -80,8 +80,9 @@ Page {
 
         }
 
-        delegate: Standard {
-            text: isFolder ? title : title + " (" + unread + ")"
+        delegate: MultiValue {
+            text: title
+			values: [unread + " Unread Stories"]
             progression: true
 			visible: isFolder || unread > 0
 
