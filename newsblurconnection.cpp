@@ -176,8 +176,6 @@ void NewsBlurConnection::feedEntriesFetched()
 
     QVariant feedEntriesData = jsonDoc.toVariant();
 
-	qDebug() << "Entries Data: " << jsonDoc;
-
     emit entriesFetched(feedEntriesData);
 }
 
@@ -187,6 +185,7 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash)
     QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QByteArray data;
     m_nam->post(request, data);

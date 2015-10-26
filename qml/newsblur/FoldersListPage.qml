@@ -11,6 +11,9 @@ Page {
 
     property string folderPath
 	property bool itemsInit: false
+	property string  queuedPushPath: ""
+	property variant queuedPushProps
+	property bool pageComplete: false
 
 	U1db.Document {
 		id: childOpened
@@ -103,18 +106,39 @@ Page {
 			Component.onCompleted: {
 				itemsInit = true
 				if (childOpened.contents["childSelected"] == title) {
+					console.log("Setting up queued push")
 					if (isFolder) {
-						pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
+						queuedPushPath = Qt.resolvedUrl("FoldersListPage.qml")
+						queuedPushProps = {
 							folderPath: root.folderPath + '/' + title,
 							title: title
-						})
+						}
 					} else {
-						console.log("Clicking on feed list '" + feedId + "': " + title);
-						pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: title})
+						queuedPushPath = Qt.resolvedUrl("FeedListPage.qml")
+						queuedPushProps = {feedId: feedId, title: title}
+					}
+
+					if (pageComplete) {
+						pageStack.push(queuedPushPath, queuedPushProps)
 					}
 				}
 			}
         }
     }
 
+	Timer {
+		id: queueTimer
+		interval: 100
+		onTriggered: {
+			pageStack.push(queuedPushPath, queuedPushProps)
+		}
+	}
+
+	Component.onCompleted: {
+		console.log("Resolving up queued push")
+		if (queuedPushPath != "") {
+			queueTimer.start()
+		}
+		pageComplete = true
+	}
 }
