@@ -75,7 +75,7 @@ Page {
 		}
 	}
 
-    ListView {
+    UbuntuListView {
         anchors.fill: parent
         model: Feeds {
 			id: feedModel
@@ -83,10 +83,38 @@ Page {
 
         }
 
-        delegate: MultiValue {
-            text: title
-			values: [unread + " Unread Stories"]
-            progression: true
+        delegate: ListItem {
+			Label {
+				id: label
+				text: title
+				elide: Text.ElideRight
+
+				anchors {
+					verticalCenter: parent.verticalCenter
+					right: chevron.left
+					left: parent.left
+				}
+			}
+
+			Icon {
+				id: chevron
+				name: "next"
+				width: parent.height * 0.4
+				height: parent.height * 0.4
+
+				anchors {
+					verticalCenter: parent.verticalCenter
+					right: parent.right
+				}
+			}
+
+			contentItem.anchors {
+				leftMargin: units.gu(2)
+				rightMargin: units.gu(1)
+			}
+
+			//values: [unread > 0 ? unread + " Unread Stories" : ""]
+            //progression: true
 			visible: isFolder || unread > 0
 
             onClicked: {
