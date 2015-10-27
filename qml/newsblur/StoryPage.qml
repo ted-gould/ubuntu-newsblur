@@ -17,8 +17,8 @@ Page {
 		Action {
 			id: openExternally
 			text: "Open"
-			iconName: "account"
-			onTriggered: Qt.openUrl(storyLink)
+			iconName: "external-link"
+			onTriggered: Qt.openUrlExternally(storyLink)
 		}
 	]
 
