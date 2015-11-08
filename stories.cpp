@@ -23,10 +23,10 @@ void Stories::entriesFetched(const QVariant &entriesData)
 		return;
 	}
 
-    beginResetModel();
-
     qDebug() << "feeds updated";
     QVariantList storyData = entriesData.toMap()["stories"].toList();
+
+	beginInsertRows(QModelIndex(), m_list.count(), m_list.count() + storyData.count() - 1);
 
     foreach (const QVariant &story, storyData) {
         QVariantMap storymap = story.toMap();
@@ -49,16 +49,20 @@ void Stories::entriesFetched(const QVariant &entriesData)
 
 	qDebug() << "Refresh complete" << (m_storiesAvailable ? ", more stories available" : "");
 
-    endResetModel();
+    endInsertRows();
 }
 
 void Stories::refresh() {
+    beginResetModel();
+
 	m_storiesAvailable = true;
 	m_list.clear();
 	m_page = 1;
 
     NewsBlurConnection::instance()->feedEntries(m_feedId, m_page);
 	m_requestInProgress = true;
+
+    endResetModel();
 }
 
 int Stories::rowCount(const QModelIndex & /*parent*/) const
