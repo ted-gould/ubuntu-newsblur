@@ -13,6 +13,7 @@ public:
     QString content;
     QString link;
     QString timestamp;
+	bool read;
 };
 
 class Stories : public QAbstractListModel, public QQmlParserStatus
@@ -27,7 +28,8 @@ public:
         RoleHash,
         RoleContent,
         RoleLink,
-        RoleTimestamp
+        RoleTimestamp,
+		RoleRead
     };
 
     explicit Stories(QObject *parent = 0);
