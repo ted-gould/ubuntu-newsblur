@@ -42,7 +42,7 @@ Page {
 				id: label
 				text: title
 				elide: Text.ElideRight
-				font.bold: read
+				font.bold: !read
 
 				anchors {
 					verticalCenter: parent.verticalCenter

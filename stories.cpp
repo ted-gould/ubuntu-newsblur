@@ -37,17 +37,19 @@ void Stories::entriesFetched(const QVariant &entriesData)
         entry.title = storymap["story_title"].toString();
         entry.hash = storymap["story_hash"].toString();
         entry.timestamp = storymap["story_data"].toString();
-		entry.read = storymap["read_status"].toInt() == 0;
+		entry.read = storymap["read_status"].toInt() != 0;
 
 		m_list.append(entry);
     }
 
     qDebug() << "Got" << m_list.count() << "stories for feed" << m_feedId;
 
-    endResetModel();
-
 	m_storiesAvailable = storyData.count() != 0 || entriesData.toMap()["hidden_stories_removed"].toInt() != 0;
 	m_requestInProgress = false;
+
+	qDebug() << "Refresh complete" << (m_storiesAvailable ? ", more stories available" : "");
+
+    endResetModel();
 }
 
 void Stories::refresh() {
@@ -74,6 +76,7 @@ void Stories::pageUpdateStart (void)
 
 QVariant Stories::data(const QModelIndex &index, int role) const
 {
+	qDebug() << "Requesting data for row: " << index.row();
 	if (index.row() == m_list.count() - 1 && m_storiesAvailable) {
 		emit pageUpdateStarted();
 	}
