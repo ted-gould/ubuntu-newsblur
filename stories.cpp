@@ -9,6 +9,7 @@ Stories::Stories(QObject *parent) :
     QAbstractListModel(parent)
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::entriesFetched, this, &Stories::entriesFetched);
+    connect(this, &Stories::pageUpdateStarted, this, &Stories::pageUpdateStart);
 }
 
 void Stories::componentComplete()
@@ -45,13 +46,17 @@ void Stories::entriesFetched(const QVariant &entriesData)
 
     endResetModel();
 
-	if (storyData.count() != 0 || entriesData.toMap()["hidden_stories_removed"].toInt() != 0) {
-		NewsBlurConnection::instance()->feedEntries(m_feedId, ++m_page);
-	}
+	m_storiesAvailable = storyData.count() != 0 || entriesData.toMap()["hidden_stories_removed"].toInt() != 0;
+	m_requestInProgress = false;
 }
 
 void Stories::refresh() {
+	m_storiesAvailable = true;
+	m_list.clear();
+	m_page = 1;
+
     NewsBlurConnection::instance()->feedEntries(m_feedId, m_page);
+	m_requestInProgress = true;
 }
 
 int Stories::rowCount(const QModelIndex & /*parent*/) const
@@ -59,8 +64,20 @@ int Stories::rowCount(const QModelIndex & /*parent*/) const
     return m_list.count();
 }
 
+void Stories::pageUpdateStart (void)
+{
+	if (!m_requestInProgress) {
+		NewsBlurConnection::instance()->feedEntries(m_feedId, ++m_page);
+		m_requestInProgress = true;
+	}
+}
+
 QVariant Stories::data(const QModelIndex &index, int role) const
 {
+	if (index.row() == m_list.count() - 1 && m_storiesAvailable) {
+		emit pageUpdateStarted();
+	}
+
     switch(role) {
     case RoleTitle:
         return m_list.at(index.row()).title;
@@ -98,8 +115,6 @@ void Stories::setFeedId(int feedId)
     qDebug() << "Story model created for feed:"<< feedId;
     if (m_feedId != feedId) {
         m_feedId = feedId;
-		m_list.clear();
-		m_page = 1;
         emit feedIdChanged();
         refresh();
     }

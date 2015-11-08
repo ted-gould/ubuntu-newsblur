@@ -45,10 +45,12 @@ protected:
 
 signals:
     void feedIdChanged();
+	void pageUpdateStarted() const;
 
 private slots:
     void refresh();
     void entriesFetched(const QVariant &entriesData);
+	void pageUpdateStart();
 
 private:
     QVariantList findNode(const QVariantList &folders, const QString &path);
@@ -58,6 +60,8 @@ private:
     QList<StoryEntry> m_list;
     int m_feedId;
 	int m_page;
+	bool m_storiesAvailable;
+	bool m_requestInProgress;
 };
 
 #endif // ENTRIES_H

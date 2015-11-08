@@ -150,7 +150,7 @@ void NewsBlurConnection::feedEntries(int feedId, int page)
     qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/feed/%1?page=%2&read_filter=unread").arg(feedId).arg(page);
+    QString url = QString("https://newsblur.com/reader/feed/%1?page=%2").arg(feedId).arg(page);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 
