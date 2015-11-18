@@ -76,11 +76,18 @@ Page {
 
     UbuntuListView {
         anchors.fill: parent
-        model: Feeds {
+        Feeds {
 			id: feedModel
             filterPath: folderPath
-
         }
+		model: SortFilterModel {
+			id: sortedFeedModel
+			model: feedModel
+			sort.property: "title"
+			sortCaseSensitivity: Qt. CaseInsensitive
+			filter.property: "unreadstr"
+			filter.pattern: /someunread/
+		}
 
         delegate: ListItem {
 			Label {
@@ -111,8 +118,6 @@ Page {
 				leftMargin: units.gu(2)
 				rightMargin: units.gu(1)
 			}
-
-			visible: isFolder || unread > 0
 
             onClicked: {
 				settingsDatabase.putDoc({"childSelected": title}, childOpened.docId)

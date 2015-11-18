@@ -24,7 +24,8 @@ public:
         RoleId,
         RoleTitle,
         RoleIsFolder,
-		RoleUnread
+		RoleUnread,
+		RoleUnreadStr
     };
 
     explicit Feeds(QObject *parent = 0);

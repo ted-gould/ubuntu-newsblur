@@ -134,6 +134,12 @@ QVariant Feeds::data(const QModelIndex &index, int role) const
         return m_list.at(index.row()).isFolder;
     case RoleUnread:
         return m_list.at(index.row()).unread;
+    case RoleUnreadStr:
+        if (m_list.at(index.row()).unread > 0) {
+			return "someunread";
+		} else {
+			return "noneunread";
+		}
     }
 
     return QVariant();
@@ -146,6 +152,7 @@ QHash<int, QByteArray> Feeds::roleNames() const
     roles.insert(RoleIsFolder, "isFolder");
     roles.insert(RoleId, "feedId");
     roles.insert(RoleUnread, "unread");
+    roles.insert(RoleUnreadStr, "unreadstr");
     return roles;
 }
 
