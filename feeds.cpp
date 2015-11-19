@@ -135,7 +135,8 @@ QVariant Feeds::data(const QModelIndex &index, int role) const
     case RoleUnread:
         return m_list.at(index.row()).unread;
     case RoleUnreadStr:
-        if (m_list.at(index.row()).unread > 0) {
+		const Entry &entry = m_list.at(index.row());
+        if (entry.unread > 0 || entry.isFolder) {
 			return "someunread";
 		} else {
 			return "noneunread";
