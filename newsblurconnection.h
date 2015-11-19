@@ -12,6 +12,7 @@ class NewsBlurConnection : public QObject
 
     Q_PROPERTY(QString username READ username NOTIFY usernameChanged)
     Q_PROPERTY(bool authenticated READ authenticated NOTIFY authenticatedChanged)
+    Q_PROPERTY(QString error READ error NOTIFY errorChanged)
 
 public:
     static NewsBlurConnection *instance();
@@ -22,6 +23,9 @@ public:
     bool authenticated() const;
 
     QVariant feedsData() const;
+
+    QString error() const;
+    void setError(const QString &error);
 
 public slots:
     void createUser(const QString &username, const QString &email, const QString &password = QString());
@@ -45,12 +49,14 @@ signals:
     void authenticatedChanged();
     void feedsUpdated(const QVariant &feedsData);
     void entriesFetched(const QVariant &entriesData);
+    void errorChanged();
 
 private:
     QNetworkAccessManager *m_nam;
     bool m_authenticated;
     QString m_username;
     QVariant m_feedsData;
+	QString m_error;
 
 };
 

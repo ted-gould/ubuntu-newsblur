@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import Ubuntu.Components 1.3
 import Ubuntu.Components.ListItems 1.3
+import Ubuntu.Components.Popups 1.3
 import NewsBlur 0.1
 import U1db 1.0 as U1db
 
@@ -24,6 +25,31 @@ MainView {
 		defaults: {
 			"username": "testuser",
 			"password": ""
+		}
+	}
+
+	Connections {
+		target: NewsBlur
+		onErrorChanged: {
+			console.log("NewBlur Error: " + NewsBlur.error)
+			PopulUtiles.open(errorDialog)
+		}
+	}
+
+	Component {
+		id: errorDialog
+		Dialog {
+			id: errorDialogInstance
+			title: "Error"
+
+			Text {
+				text: NewsBlur.error
+			}
+
+			Button {
+				text: "Close"
+				onClicked: PopupUtils.close(errorDialogInstance)
+			}
 		}
 	}
 

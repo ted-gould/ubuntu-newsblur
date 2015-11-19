@@ -33,6 +33,20 @@ QString NewsBlurConnection::username() const
     return m_username;
 }
 
+
+QString NewsBlurConnection::error() const
+{
+    return m_error;
+}
+
+void NewsBlurConnection::setError(const QString &error)
+{
+	if (m_error != error) {
+		m_error = error;
+		errorChanged();
+	}
+}
+
 void NewsBlurConnection::login(const QString &username, const QString &password)
 {
     if (m_username != username) {
@@ -87,6 +101,8 @@ void NewsBlurConnection::loggedIn()
         qWarning() << "Failed to log in" << reply->errorString();
         m_authenticated = false;
         emit authenticatedChanged();
+
+		setError("Networking issue: " + reply->errorString());
         return;
     }
 
@@ -96,6 +112,8 @@ void NewsBlurConnection::loggedIn()
         qWarning() << "Failed to parse login response" << error.errorString();
         m_authenticated = false;
         emit authenticatedChanged();
+
+		setError("Unable to authenticate");
         return;
     }
 
@@ -112,8 +130,6 @@ void NewsBlurConnection::fetchFeeds()
     qDebug() << "fetching feeds...";
     QNetworkRequest request;
     request.setUrl(QUrl("https://newsblur.com/reader/feeds"));
-
-//    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     QNetworkReply *reply = m_nam->get(request);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedsFetched);
