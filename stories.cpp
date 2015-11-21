@@ -9,11 +9,28 @@ Stories::Stories(QObject *parent) :
     QAbstractListModel(parent)
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::entriesFetched, this, &Stories::entriesFetched);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Stories::feedDecremented);
     connect(this, &Stories::pageUpdateStarted, this, &Stories::pageUpdateStart);
 }
 
 void Stories::componentComplete()
 {
+}
+
+void Stories::feedDecremented(int feedId, const QString &hash) {
+	if (m_feedId != feedId) {
+		return;
+	}
+
+	QVector<int> roles;
+	roles += RoleRead;
+
+    for (int i = 0; i < m_list.count(); i++) {
+        if (m_list[i].hash == hash) {
+            m_list[i].read = true;
+            emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
+        }
+    }
 }
 
 void Stories::entriesFetched(const QVariant &entriesData)

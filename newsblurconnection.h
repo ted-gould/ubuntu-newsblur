@@ -50,7 +50,7 @@ signals:
     void feedsUpdated(const QVariant &feedsData);
     void entriesFetched(const QVariant &entriesData);
     void errorChanged();
-    void feedDecremented(int feedId);
+    void feedDecremented(int feedId, const QString &hash);
 
 private:
     QNetworkAccessManager *m_nam;

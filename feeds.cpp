@@ -25,10 +25,14 @@ void Feeds::feedsUpdated(const QVariant &feedsData)
 
 void Feeds::feedDecremented(int feedId)
 {
+	QVector<int> roles;
+	roles += RoleUnread;
+	roles += RoleUnreadStr;
+
     for (int i = 0; i < m_list.count(); i++) {
         if (m_list[i].id == feedId) {
             m_list[i].unread--;
-            emit dataChanged(createIndex(i, 0), createIndex(i, 0), {RoleUnread, RoleUnreadStr});
+            emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
         }
     }
 }
