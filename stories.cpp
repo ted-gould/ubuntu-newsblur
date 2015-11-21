@@ -61,7 +61,11 @@ void Stories::entriesFetched(const QVariant &entriesData)
 
     qDebug() << "Got" << m_list.count() << "stories for feed" << m_feedId;
 
+	bool prev = m_storiesAvailable;
 	m_storiesAvailable = storyData.count() != 0 || entriesData.toMap()["hidden_stories_removed"].toInt() != 0;
+	if (prev != m_storiesAvailable)
+		emit storiesAvailableChanged();
+
 	m_requestInProgress = false;
 
 	qDebug() << "Refresh complete" << (m_storiesAvailable ? ", more stories available" : "");
@@ -135,6 +139,11 @@ QHash<int, QByteArray> Stories::roleNames() const
 int Stories::feedId() const
 {
     return m_feedId;
+}
+
+bool Stories::storiesAvailable() const
+{
+    return m_storiesAvailable;
 }
 
 void Stories::setFeedId(int feedId)

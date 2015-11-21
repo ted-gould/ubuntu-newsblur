@@ -21,6 +21,7 @@ class Stories : public QAbstractListModel, public QQmlParserStatus
     Q_OBJECT
 
     Q_PROPERTY(int feedId READ feedId WRITE setFeedId NOTIFY feedIdChanged)
+    Q_PROPERTY(bool storiesAvailable READ storiesAvailable NOTIFY storiesAvailableChanged)
 
 public:
     enum Roles {
@@ -41,6 +42,8 @@ public:
     int feedId() const;
     void setFeedId(int feedId);
 
+	bool storiesAvailable() const;
+
 protected:
     void componentComplete();
     void classBegin() {}
@@ -48,6 +51,7 @@ protected:
 signals:
     void feedIdChanged();
 	void pageUpdateStarted() const;
+    void storiesAvailableChanged();
 
 private slots:
     void refresh();
