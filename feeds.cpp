@@ -8,6 +8,7 @@ Feeds::Feeds(QObject *parent) :
     QAbstractListModel(parent)
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedsUpdated, this, &Feeds::feedsUpdated);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Feeds::feedDecremented);
 }
 
 void Feeds::componentComplete()
@@ -20,6 +21,16 @@ void Feeds::feedsUpdated(const QVariant &feedsData)
     Q_UNUSED(feedsData)
     qDebug() << "feeds updated";
     refresh();
+}
+
+void Feeds::feedDecremented(int feedId)
+{
+    for (int i = 0; i < m_list.count(); i++) {
+        if (m_list[i].id == feedId) {
+            m_list[i].unread--;
+            emit dataChanged(createIndex(i, 0), createIndex(i, 0), {RoleUnread, RoleUnreadStr});
+        }
+    }
 }
 
 void Feeds::refresh() {

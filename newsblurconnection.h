@@ -32,7 +32,7 @@ public slots:
     void login(const QString &username, const QString &password = QString());
     void fetchFeeds();
 	void feedEntries(int feedId, int page = 1);
-	void markStoryHashRead (const QString &hash);
+	void markStoryHashRead (const QString &hash, int feedId);
 
 private slots:
     void userCreated();
@@ -50,6 +50,7 @@ signals:
     void feedsUpdated(const QVariant &feedsData);
     void entriesFetched(const QVariant &entriesData);
     void errorChanged();
+    void feedDecremented(int feedId);
 
 private:
     QNetworkAccessManager *m_nam;

@@ -195,8 +195,12 @@ void NewsBlurConnection::feedEntriesFetched()
     emit entriesFetched(feedEntriesData);
 }
 
-void NewsBlurConnection::markStoryHashRead(const QString &hash)
+void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 {
+	/* Mark the story as read in the read count for the feed */
+    emit feedDecremented(feedId);
+
+	/* Sent the request to the API to mark it as read on the server */
     QNetworkRequest request;
     QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
     qDebug() << "feed url: " << url;

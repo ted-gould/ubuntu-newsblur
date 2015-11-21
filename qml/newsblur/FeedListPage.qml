@@ -70,7 +70,7 @@ Page {
 
             onClicked: {
                  pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: title, storyLink: link, storyContent: content});
-		         NewsBlur.markStoryHashRead(hash);
+		         NewsBlur.markStoryHashRead(hash, root.feedId);
             }
 
 			Component.onCompleted: {
