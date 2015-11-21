@@ -32,7 +32,7 @@ MainView {
 		target: NewsBlur
 		onErrorChanged: {
 			console.log("NewBlur Error: " + NewsBlur.error)
-			PopulUtiles.open(errorDialog)
+			PopupUtils.open(errorDialog)
 		}
 	}
 
