@@ -155,3 +155,8 @@ void Stories::setFeedId(int feedId)
         refresh();
     }
 }
+
+void Stories::markStoryHashRead(const QString &hash)
+{
+	NewsBlurConnection::instance()->markStoryHashRead(hash, feedId());
+}

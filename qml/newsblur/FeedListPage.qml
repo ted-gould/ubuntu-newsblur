@@ -34,6 +34,7 @@ Page {
         anchors.fill: parent
 
         model: Stories {
+			id: stories
             feedId: root.feedId
         }
 
@@ -70,7 +71,8 @@ Page {
 
             onClicked: {
                  pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: title, storyLink: link, storyContent: content});
-		         NewsBlur.markStoryHashRead(hash, root.feedId);
+				 if (!read)
+					 stories.markStoryHashRead(hash);
             }
 
 			Component.onCompleted: {
@@ -80,5 +82,16 @@ Page {
 				}
 			}
         }
-    }
+
+		footer: Column {
+			Label {
+				text: "More to come"
+				visible: stories.storiesAvailable
+			}
+			Icon {
+				visible: !stories.storiesAvailable
+				source: Qt.resolvedUrl('newsblur-footer.png')
+			}
+		}
+	}
 }

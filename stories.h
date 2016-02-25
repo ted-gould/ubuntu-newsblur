@@ -53,8 +53,11 @@ signals:
 	void pageUpdateStarted() const;
     void storiesAvailableChanged();
 
-private slots:
+public slots:
+	void markStoryHashRead(const QString &hash);
     void refresh();
+
+private slots:
     void entriesFetched(const QVariant &entriesData);
 	void pageUpdateStart();
 	void feedDecremented(int feedId, const QString &hash);
