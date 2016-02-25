@@ -13,3 +13,7 @@ newsblur
 newsblurconnection.o
 qtquick2applicationviewer.o
 stories.o
+CMakeCache.txt
+CMakeFiles
+*_automoc.cpp
+cmake_install.cmake

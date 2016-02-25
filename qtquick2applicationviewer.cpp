@@ -79,3 +79,4 @@ void QtQuick2ApplicationViewer::showExpanded()
     show();
 #endif
 }
+
