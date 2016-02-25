@@ -7,5 +7,5 @@ TODO
 ====
 
 * Online Accounts Integration
-* Paging Stories
-* Marking stories as read
+* River of news feeds
+* Convergence Adaptive layout
