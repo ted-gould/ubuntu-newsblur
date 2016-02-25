@@ -4,5 +4,5 @@ install(FILES
  FoldersListPage.qml
  main.qml
  StoryPage.qml
- DESTINATION ${CMAKE_BINARY_DIR}
+ DESTINATION ${CMAKE_INSTALL_PREFIX}/qml/newsblur
 )

@@ -17,3 +17,7 @@ CMakeCache.txt
 CMakeFiles
 *_automoc.cpp
 cmake_install.cmake
+snap/
+stage/
+parts/
+ubuntu-newsblur_*.snap

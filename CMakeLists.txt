@@ -38,5 +38,5 @@ stories.h
 
 qt5_use_modules(newsblur Gui Qml Quick)
 
-install(TARGETS newsblur DESTINATION ${CMAKE_BINARY_DIR})
+install(TARGETS newsblur DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 

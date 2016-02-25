@@ -1,0 +1,21 @@
+name: ubuntu-newsblur
+version: 0.1
+summary: Newsblur Client for Ubuntu Devices
+icon: newsblur80.png
+description: Client to read all your news from all over the Internet
+
+parts:
+  newsblur:
+    plugin: cmake
+    source: .
+
+apps:
+  newblur:
+    command: bin/newsblur
+    uses: ["appman", "network-client"]
+
+uses:
+  appman:
+    type: application-manager
+    icon: newsblur80.png
+    title: Newsblur
