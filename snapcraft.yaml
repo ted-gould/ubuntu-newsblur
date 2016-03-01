@@ -10,7 +10,7 @@ parts:
     source: .
 
 apps:
-  newblur:
+  newsblur:
     command: bin/newsblur
     uses: ["appman", "network-client"]
 
