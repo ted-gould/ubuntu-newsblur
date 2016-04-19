@@ -164,7 +164,7 @@ QVariant Feeds::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> Feeds::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles.insert(RoleTitle, "title");
+    roles.insert(RoleTitle, "feedtitle");
     roles.insert(RoleIsFolder, "isFolder");
     roles.insert(RoleId, "feedId");
     roles.insert(RoleUnread, "unread");

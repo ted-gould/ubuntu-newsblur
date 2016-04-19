@@ -127,7 +127,7 @@ QVariant Stories::data(const QModelIndex &index, int role) const
 QHash<int, QByteArray> Stories::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles.insert(RoleTitle, "title");
+    roles.insert(RoleTitle, "storytitle");
     roles.insert(RoleHash, "hash");
     roles.insert(RoleContent, "content");
     roles.insert(RoleLink, "link");

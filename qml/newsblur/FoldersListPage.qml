@@ -80,72 +80,51 @@ Page {
 			id: feedModel
             filterPath: folderPath
         }
+
 		model: SortFilterModel {
 			id: sortedFeedModel
 			model: feedModel
-			sort.property: "title"
+			sort.property: "feedtitle"
 			sortCaseSensitivity: Qt. CaseInsensitive
 			filter.property: "unreadstr"
 			filter.pattern: /someunread/
 		}
 
         delegate: ListItem {
-			Label {
-				id: label
-				text: title
-				elide: Text.ElideRight
+			ListItemLayout {
+				title.text: feedtitle
+				title.elide: Text.ElideRight
 
-				anchors {
-					verticalCenter: parent.verticalCenter
-					right: chevron.left
-					left: parent.left
-				}
-			}
-
-			Icon {
-				id: chevron
-				name: "next"
-				width: parent.height * 0.4
-				height: parent.height * 0.4
-
-				anchors {
-					verticalCenter: parent.verticalCenter
-					right: parent.right
-				}
-			}
-
-			contentItem.anchors {
-				leftMargin: units.gu(2)
-				rightMargin: units.gu(1)
+				ProgressionSlot {}
 			}
 
             onClicked: {
-				settingsDatabase.putDoc({"childSelected": title}, childOpened.docId)
+				settingsDatabase.putDoc({"childSelected": feedtitle}, childOpened.docId)
 
                 if (isFolder) {
                     pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
-						folderPath: root.folderPath + '/' + title,
-						title: title
+						folderPath: root.folderPath + '/' + feedtitle,
+						title: feedtitle
 					})
                 } else {
-                    console.log("Clicking on feed list '" + feedId + "': " + title);
-                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: title})
+                    console.log("Clicking on feed list '" + feedId + "': " + feedtitle);
+                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: feedtitle})
                 }
             }
 			
 			Component.onCompleted: {
 				itemsInit = true
-				if (childOpened.contents["childSelected"] == title) {
+				if (childOpened.contents["childSelected"] == feedtitle) {
 					console.log("Setting up queued push")
 					if (isFolder) {
 						queuedPushPath = Qt.resolvedUrl("FoldersListPage.qml")
 						queuedPushProps = {
-							folderPath: root.folderPath + '/' + title,
-							title: title
+							folderPath: root.folderPath + '/' + feedtitle,
+							title: feedtitle
 						}
 					} else {
 						queuedPushPath = Qt.resolvedUrl("FeedListPage.qml")
-						queuedPushProps = {feedId: feedId, title: title}
+						queuedPushProps = {feedId: feedId, title: feedtitle}
 					}
 
 					if (pageComplete) {

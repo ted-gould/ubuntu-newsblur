@@ -39,46 +39,24 @@ Page {
         }
 
         delegate: ListItem {
-			Label {
-				id: label
-				text: title
-				elide: Text.ElideRight
-				font.bold: !read
+			ListItemLayout {
+				title.text: storytitle
+				title.elide: Text.ElideRight
+				title.font.bold: !read
 
-				anchors {
-					verticalCenter: parent.verticalCenter
-					right: chevron.left
-					left: parent.left
-				}
-			}
-
-			Icon {
-				id: chevron
-				name: "next"
-				width: parent.height * 0.4
-				height: parent.height * 0.4
-
-				anchors {
-					verticalCenter: parent.verticalCenter
-					right: parent.right
-				}
-			}
-
-			contentItem.anchors {
-				leftMargin: units.gu(2)
-				rightMargin: units.gu(1)
+				ProgressionSlot {}
 			}
 
             onClicked: {
-                 pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: title, storyLink: link, storyContent: content});
+                 pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
 				 if (!read)
 					 stories.markStoryHashRead(hash);
             }
 
 			Component.onCompleted: {
 				itemsInit = true
-				if (childOpened.contents["childSelected"] == title) {
-					pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: title, storyLink: link, storyContent: content});
+				if (childOpened.contents["childSelected"] == storytitle) {
+					pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
 				}
 			}
         }
