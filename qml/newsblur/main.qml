@@ -54,12 +54,17 @@ MainView {
 	}
 
     Component.onCompleted: {
-        pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"))
         NewsBlur.login(loginInfo.contents["username"], loginInfo.contents["password"])
     }
 
-    PageStack {
-        id: pageStack
+    AdaptivePageLayout {
+        id: pagelayout
         anchors.fill: parent
+
+		Component.onCompleted: {
+			var component = Qt.createComponent("FoldersListPage.qml")
+			if (component.status == Component.Ready)
+				pagelayout.primaryPage = component.createObject(pagelayout)
+		}
     }
 }

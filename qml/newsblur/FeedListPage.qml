@@ -21,9 +21,9 @@ Page {
 	}
 
 	Connections {
-		target: pageStack
+		target: root.pageStack
 		onCurrentPageChanged: {
-			if (itemsInit && pageStack.currentPage == root) {
+			if (itemsInit && root.pageStack.currentPage == root) {
 				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + root.title + "'")
 				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
 			}
@@ -48,7 +48,7 @@ Page {
 			}
 
             onClicked: {
-                 pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
+                 root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
 				 if (!read)
 					 stories.markStoryHashRead(hash);
             }
@@ -56,7 +56,7 @@ Page {
 			Component.onCompleted: {
 				itemsInit = true
 				if (childOpened.contents["childSelected"] == storytitle) {
-					pageStack.push(Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
+					root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
 				}
 			}
         }

@@ -65,9 +65,9 @@ Page {
 	]
 
 	Connections {
-		target: pageStack
+		target: root.pageStack
 		onCurrentPageChanged: {
-			if (itemsInit && pageStack.currentPage == root) {
+			if (itemsInit && root.pageStack.currentPage == root) {
 				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + root.title + "'")
 				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
 			}
@@ -102,13 +102,13 @@ Page {
 				settingsDatabase.putDoc({"childSelected": feedtitle}, childOpened.docId)
 
                 if (isFolder) {
-                    pageStack.push(Qt.resolvedUrl("FoldersListPage.qml"), {
+                    root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FoldersListPage.qml"), {
 						folderPath: root.folderPath + '/' + feedtitle,
 						title: feedtitle
 					})
                 } else {
                     console.log("Clicking on feed list '" + feedId + "': " + feedtitle);
-                    pageStack.push(Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: feedtitle})
+                    root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: feedtitle})
                 }
             }
 			
@@ -128,7 +128,7 @@ Page {
 					}
 
 					if (pageComplete) {
-						pageStack.push(queuedPushPath, queuedPushProps)
+						root.pageStack.addPageToCurrentColumn(root, queuedPushPath, queuedPushProps)
 					}
 				}
 			}
@@ -139,7 +139,7 @@ Page {
 		id: queueTimer
 		interval: 100
 		onTriggered: {
-			pageStack.push(queuedPushPath, queuedPushProps)
+			root.pageStack.addPageToCurrentColumn(root, queuedPushPath, queuedPushProps)
 		}
 	}
 
