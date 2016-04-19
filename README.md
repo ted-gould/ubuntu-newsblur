@@ -8,4 +8,3 @@ TODO
 
 * Online Accounts Integration
 * River of news feeds
-* Convergence Adaptive layout
