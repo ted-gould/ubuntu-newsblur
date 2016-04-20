@@ -1,5 +1,6 @@
 import QtQuick 2.4
 import Ubuntu.Components 1.3
+import Ubuntu.Components.Popups 1.3
 import NewsBlur 0.1
 import U1db 1.0 as U1db
 
@@ -21,9 +22,29 @@ Page {
 			id: markRead
 			text: "Mark Feed Read"
 			iconName: "calendar-today"
-			onTriggered: stories.markFeedRead()
+			onTriggered: PopupUtils.open(clearDialog)
 		}
 	]
+
+	Component {
+		id: clearDialog
+		Dialog {
+			id: clearDialogInstance
+			title: "Mark Feed Read?"
+
+			Button {
+				text: "Mark Read"
+				onClicked: {
+					PopupUtils.close(clearDialogInstance)
+					stories.markFeedRead()
+				}
+			}
+			Button {
+				text: "Cancel"
+				onClicked: PopupUtils.close(clearDialogInstance)
+			}
+		}
+	}
 
 	U1db.Document {
 		id: childOpened
