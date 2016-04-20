@@ -33,6 +33,7 @@ public slots:
     void fetchFeeds();
 	void feedEntries(int feedId, int page = 1);
 	void markStoryHashRead (const QString &hash, int feedId);
+	void markFeedRead (int feedId);
 
 private slots:
     void userCreated();

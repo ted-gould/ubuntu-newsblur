@@ -56,6 +56,7 @@ signals:
 public slots:
 	void markStoryHashRead(const QString &hash);
     void refresh();
+	void markFeedRead();
 
 private slots:
     void entriesFetched(const QVariant &entriesData);

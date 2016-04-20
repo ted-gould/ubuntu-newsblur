@@ -101,7 +101,6 @@ void Stories::pageUpdateStart (void)
 
 QVariant Stories::data(const QModelIndex &index, int role) const
 {
-	qDebug() << "Requesting data for row: " << index.row();
 	if (index.row() == m_list.count() - 1 && m_storiesAvailable) {
 		emit pageUpdateStarted();
 	}
@@ -159,4 +158,10 @@ void Stories::setFeedId(int feedId)
 void Stories::markStoryHashRead(const QString &hash)
 {
 	NewsBlurConnection::instance()->markStoryHashRead(hash, feedId());
+}
+
+void Stories::markFeedRead ()
+{
+	NewsBlurConnection::instance()->markFeedRead(feedId());
+	refresh();
 }

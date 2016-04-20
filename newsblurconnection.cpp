@@ -210,3 +210,15 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 	QByteArray data;
     m_nam->post(request, data);
 }
+
+void NewsBlurConnection::markFeedRead(int feedId)
+{
+    QNetworkRequest request;
+    QString url = QString("https://newsblur.com/reader/mark_feed_as_read?feed_id=%1").arg(feedId);
+    qDebug() << "feed url: " << url;
+    request.setUrl(QUrl(url));
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+	QByteArray data;
+    m_nam->post(request, data);
+}

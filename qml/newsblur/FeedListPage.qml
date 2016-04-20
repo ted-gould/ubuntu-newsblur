@@ -10,6 +10,21 @@ Page {
     property int feedId
 	property bool itemsInit: false
 
+	head.actions: [
+		Action {
+			id: refreshFeed
+			text: "Refresh"
+			iconName: "view-refresh"
+			onTriggered: stories.refresh()
+		},
+		Action {
+			id: markRead
+			text: "Mark Feed Read"
+			iconName: "calendar-today"
+			onTriggered: stories.markFeedRead()
+		}
+	]
+
 	U1db.Document {
 		id: childOpened
 		database: settingsDatabase
