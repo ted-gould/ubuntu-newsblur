@@ -83,12 +83,17 @@ Page {
 				title.font.bold: !read
 
 				UbuntuShape {
+					id: ushape
 					height: storyitem.height * 0.75
 					width: storyitem.height * 0.75
 
+					visible: false
+
 					SlotsLayout.position: SlotsLayout.Trailing
 					source: Image {
+						id: image
 						source: imageurl
+						onStatusChanged: if (image.status == Image.Ready) ushape.visible = (imageurl != "")
 					}
 				}
 
