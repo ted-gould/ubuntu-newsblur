@@ -75,10 +75,22 @@ Page {
         }
 
         delegate: ListItem {
+			id: storyitem
+
 			ListItemLayout {
 				title.text: storytitle
 				title.elide: Text.ElideRight
 				title.font.bold: !read
+
+				UbuntuShape {
+					height: storyitem.height * 0.75
+					width: storyitem.height * 0.75
+
+					SlotsLayout.position: SlotsLayout.Trailing
+					source: Image {
+						source: imageurl
+					}
+				}
 
 				ProgressionSlot {}
 			}

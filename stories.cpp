@@ -55,6 +55,7 @@ void Stories::entriesFetched(const QVariant &entriesData)
 	beginInsertRows(QModelIndex(), m_list.count(), m_list.count() + storyData.count() - 1);
 
     foreach (const QVariant &story, storyData) {
+		//qDebug() << "Story info: " << story;
         QVariantMap storymap = story.toMap();
         StoryEntry entry;
 
@@ -64,6 +65,10 @@ void Stories::entriesFetched(const QVariant &entriesData)
         entry.hash = storymap["story_hash"].toString();
         entry.timestamp = storymap["story_data"].toString();
 		entry.read = storymap["read_status"].toInt() != 0;
+
+		QList<QVariant> imagelist = storymap["image_urls"].toList();
+		if (imagelist.size() > 0)
+			entry.imageurl = imagelist.first().toString();
 
 		m_list.append(entry);
     }
@@ -127,6 +132,8 @@ QVariant Stories::data(const QModelIndex &index, int role) const
         return m_list.at(index.row()).timestamp;
     case RoleRead:
         return m_list.at(index.row()).read;
+    case RoleImageUrl:
+        return m_list.at(index.row()).imageurl;
     }
 
     return QVariant();
@@ -141,6 +148,7 @@ QHash<int, QByteArray> Stories::roleNames() const
     roles.insert(RoleLink, "link");
     roles.insert(RoleTimestamp, "timestamp");
     roles.insert(RoleRead, "read");
+    roles.insert(RoleImageUrl, "imageurl");
     return roles;
 }
 

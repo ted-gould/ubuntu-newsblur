@@ -14,6 +14,7 @@ public:
     QString link;
     QString timestamp;
 	bool read;
+	QString imageurl;
 };
 
 class Stories : public QAbstractListModel, public QQmlParserStatus
@@ -30,7 +31,8 @@ public:
         RoleContent,
         RoleLink,
         RoleTimestamp,
-		RoleRead
+		RoleRead,
+		RoleImageUrl
     };
 
     explicit Stories(QObject *parent = 0);
