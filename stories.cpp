@@ -10,6 +10,7 @@ Stories::Stories(QObject *parent) :
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::entriesFetched, this, &Stories::entriesFetched);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Stories::feedDecremented);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedReset, this, &Stories::feedReset);
     connect(this, &Stories::pageUpdateStarted, this, &Stories::pageUpdateStart);
 }
 
@@ -31,6 +32,14 @@ void Stories::feedDecremented(int feedId, const QString &hash) {
             emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
         }
     }
+}
+
+void Stories::feedReset (int feedId) {
+	if (m_feedId != feedId) {
+		return;
+	}
+
+	refresh();
 }
 
 void Stories::entriesFetched(const QVariant &entriesData)
@@ -163,5 +172,4 @@ void Stories::markStoryHashRead(const QString &hash)
 void Stories::markFeedRead ()
 {
 	NewsBlurConnection::instance()->markFeedRead(feedId());
-	refresh();
 }

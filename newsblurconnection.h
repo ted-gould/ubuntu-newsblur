@@ -40,6 +40,7 @@ private slots:
     void loggedIn();
     void feedsFetched();
     void feedEntriesFetched();
+	void feedMarkedRead();
 
 private:
     explicit NewsBlurConnection(QObject *parent = 0);
@@ -52,6 +53,7 @@ signals:
     void entriesFetched(const QVariant &entriesData);
     void errorChanged();
     void feedDecremented(int feedId, const QString &hash);
+    void feedReset(int feedId);
 
 private:
     QNetworkAccessManager *m_nam;
@@ -59,6 +61,7 @@ private:
     QString m_username;
     QVariant m_feedsData;
 	QString m_error;
+	int m_feedResetId;
 
 };
 

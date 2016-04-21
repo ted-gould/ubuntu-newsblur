@@ -220,5 +220,13 @@ void NewsBlurConnection::markFeedRead(int feedId)
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QByteArray data;
-    m_nam->post(request, data);
+    QNetworkReply* reply = m_nam->post(request, data);
+    connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedMarkedRead);
+	m_feedResetId = feedId; /* This sucks */
+}
+
+void NewsBlurConnection::feedMarkedRead ()
+{
+	qDebug() << "Feed Reset: " << m_feedResetId;
+	emit feedReset(m_feedResetId);
 }
