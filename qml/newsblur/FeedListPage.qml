@@ -6,25 +6,34 @@ import U1db 1.0 as U1db
 
 Page {
     id: root
-    title: "NewsBlur"
 
     property int feedId
 	property bool itemsInit: false
+	property string title: "NewsBlur"
 
-	head.actions: [
-		Action {
-			id: refreshFeed
-			text: "Refresh"
-			iconName: "view-refresh"
-			onTriggered: stories.refresh()
-		},
-		Action {
-			id: markRead
-			text: "Mark Feed Read"
-			iconName: "calendar-today"
-			onTriggered: PopupUtils.open(clearDialog)
+	header: PageHeader {
+		id: header
+		title: root.title
+
+		trailingActionBar {
+			actions: [
+				Action {
+					id: refreshFeed
+					text: "Refresh"
+					iconName: "view-refresh"
+					onTriggered: stories.refresh()
+				},
+				Action {
+					id: markRead
+					text: "Mark Feed Read"
+					iconName: "calendar-today"
+					onTriggered: PopupUtils.open(clearDialog)
+				}
+			]
 		}
-	]
+
+		flickable: listview
+	}
 
 	Component {
 		id: clearDialog
@@ -49,7 +58,7 @@ Page {
 	U1db.Document {
 		id: childOpened
 		database: settingsDatabase
-		docId: 'child-opened-' + title.replace(/\W/g, '-')
+		docId: 'child-opened-' + header.title.replace(/\W/g, '-')
 		create: true
 		defaults: {
 			"childSelected": "None"
@@ -60,13 +69,15 @@ Page {
 		target: root.pageStack
 		onCurrentPageChanged: {
 			if (itemsInit && root.pageStack.currentPage == root) {
-				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + root.title + "'")
+				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + header.title + "'")
 				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
 			}
 		}
 	}
 
     UbuntuListView {
+		id: listview
+
         anchors.fill: parent
 
         model: Stories {
