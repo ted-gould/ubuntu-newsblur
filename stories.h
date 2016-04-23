@@ -17,7 +17,7 @@ public:
 	QString imageurl;
 };
 
-class Stories : public QAbstractListModel //, public QQmlParserStatus
+class Stories : public QAbstractListModel
 {
     Q_OBJECT
 

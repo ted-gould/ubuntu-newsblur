@@ -50,7 +50,13 @@ Page {
 		anchors.right: story.right
 		anchors.left: story.left
 
-		Component.onCompleted: loadHtml(story.storyContent)
+		Component.onCompleted: {
+			if (story.storyContent != "") {
+				loadHtml(story.storyContent)
+			} else {
+				webview.url = storyLink
+			}
+		}
 
 		incognito: true
 
