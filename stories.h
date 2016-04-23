@@ -17,12 +17,13 @@ public:
 	QString imageurl;
 };
 
-class Stories : public QAbstractListModel, public QQmlParserStatus
+class Stories : public QAbstractListModel //, public QQmlParserStatus
 {
     Q_OBJECT
 
     Q_PROPERTY(int feedId READ feedId WRITE setFeedId NOTIFY feedIdChanged)
     Q_PROPERTY(bool storiesAvailable READ storiesAvailable NOTIFY storiesAvailableChanged)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
 
 public:
     enum Roles {
@@ -45,6 +46,7 @@ public:
     void setFeedId(int feedId);
 
 	bool storiesAvailable() const;
+	bool loading() const;
 
 protected:
     void componentComplete();
@@ -54,6 +56,7 @@ signals:
     void feedIdChanged();
 	void pageUpdateStarted() const;
     void storiesAvailableChanged();
+    void loadingChanged();
 
 public slots:
 	void markStoryHashRead(const QString &hash);

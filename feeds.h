@@ -48,6 +48,7 @@ private slots:
     void refresh();
     void feedsUpdated(const QVariant &feedsData);
     void feedDecremented(int feedId);
+    void feedReset(int feedId);
 
 private:
     QVariantList findNode(const QVariantList &folders, const QString &path);

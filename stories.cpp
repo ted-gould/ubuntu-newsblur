@@ -85,6 +85,8 @@ void Stories::entriesFetched(const QVariant &entriesData)
 	qDebug() << "Refresh complete" << (m_storiesAvailable ? ", more stories available" : "");
 
     endInsertRows();
+
+	emit loadingChanged();
 }
 
 void Stories::refresh() {
@@ -98,6 +100,8 @@ void Stories::refresh() {
 	m_requestInProgress = true;
 
     endResetModel();
+
+	emit loadingChanged();
 }
 
 int Stories::rowCount(const QModelIndex & /*parent*/) const
@@ -155,6 +159,11 @@ QHash<int, QByteArray> Stories::roleNames() const
 int Stories::feedId() const
 {
     return m_feedId;
+}
+
+bool Stories::loading() const
+{
+	return m_requestInProgress && m_list.count() == 0;
 }
 
 bool Stories::storiesAvailable() const

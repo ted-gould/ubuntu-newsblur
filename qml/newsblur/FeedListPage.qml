@@ -85,6 +85,12 @@ Page {
             feedId: root.feedId
         }
 
+		pullToRefresh {
+			enabled: true
+			onRefresh: stories.refresh()
+			refreshing: stories.loading
+		}
+
         delegate: ListItem {
 			id: storyitem
 
@@ -92,6 +98,8 @@ Page {
 				title.text: storytitle
 				title.elide: Text.ElideRight
 				title.font.bold: !read
+
+				subtitle.text: content.replace(/<(?:.|\n)*?>/gm, '')
 
 				UbuntuShape {
 					id: ushape
