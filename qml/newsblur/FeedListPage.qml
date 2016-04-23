@@ -79,6 +79,7 @@ Page {
 		id: listview
 
         anchors.fill: parent
+		highlightFollowsCurrentItem: true
 
         model: Stories {
 			id: stories
@@ -120,6 +121,7 @@ Page {
 			}
 
             onClicked: {
+				 listview.currentIndex = index
                  root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content});
 				 if (!read)
 					 stories.markStoryHashRead(hash);
@@ -135,7 +137,7 @@ Page {
 
 		footer: Column {
 			Label {
-				text: "More to come"
+				text: "Loading…"
 				visible: stories.storiesAvailable
 			}
 			Icon {
