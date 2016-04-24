@@ -10,7 +10,7 @@ MainView {
     height: units.gu(70)
 
     automaticOrientation: true
-    applicationName: "cx.gould.ted.newsblur"
+    applicationName: "ubuntu-newsblur.ted"
 
 	U1db.Database {
 		id: settingsDatabase
