@@ -13,7 +13,7 @@ public:
 	int unread;
 };
 
-class Feeds : public QAbstractListModel, public QQmlParserStatus
+class Feeds : public QAbstractListModel
 {
     Q_OBJECT
 
