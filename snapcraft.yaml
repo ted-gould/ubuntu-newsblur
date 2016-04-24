@@ -16,5 +16,5 @@ apps:
 plugs:
   appman:
     type: application-manager
-    icon: newsblur80.png
+    icon: newsblur-suru-logo.svg
     title: Newsblur

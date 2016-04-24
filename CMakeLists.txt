@@ -39,4 +39,5 @@ stories.h
 qt5_use_modules(newsblur Gui Qml Quick)
 
 install(TARGETS newsblur DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(FILES newsblur-suru-logo.svg DESTINATION ${CMAKE_INSTALL_PREFIX})
 
