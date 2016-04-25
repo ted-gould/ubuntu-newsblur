@@ -12,11 +12,11 @@ Page {
 	property string  queuedPushPath: ""
 	property variant queuedPushProps
 	property bool pageComplete: false
-	property string title: "NewsBlur"
+	property string folderTitle: "NewsBlur"
 
 	header: PageHeader {
 		id: header
-		title: root.title
+		title: root.folderTitle
 		flickable: listview
 
 		trailingActionBar {
@@ -75,7 +75,7 @@ Page {
 
 	Connections {
 		target: root.pageStack
-		onCurrentPageChanged: {
+		onPrimaryPageChanged: {
 			if (itemsInit && root.pageStack.currentPage == root) {
 				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + header.title + "'")
 				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
@@ -115,11 +115,11 @@ Page {
                 if (isFolder) {
                     root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FoldersListPage.qml"), {
 						folderPath: root.folderPath + '/' + feedtitle,
-						title: feedtitle
+						folderTitle: feedtitle
 					})
                 } else {
                     console.log("Clicking on feed list '" + feedId + "': " + feedtitle);
-                    root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, title: feedtitle})
+                    root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FeedListPage.qml"), {feedId: feedId, feedTitle: feedtitle})
                 }
             }
 			
@@ -131,11 +131,11 @@ Page {
 						queuedPushPath = Qt.resolvedUrl("FoldersListPage.qml")
 						queuedPushProps = {
 							folderPath: root.folderPath + '/' + feedtitle,
-							title: feedtitle
+							folderTitle: feedtitle
 						}
 					} else {
 						queuedPushPath = Qt.resolvedUrl("FeedListPage.qml")
-						queuedPushProps = {feedId: feedId, title: feedtitle}
+						queuedPushProps = {feedId: feedId, feedTitle: feedtitle}
 					}
 
 					if (pageComplete) {

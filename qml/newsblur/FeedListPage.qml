@@ -9,11 +9,11 @@ Page {
 
     property int feedId
 	property bool itemsInit: false
-	property string title: "NewsBlur"
+	property string feedTitle: "NewsBlur"
 
 	header: PageHeader {
 		id: header
-		title: root.title
+		title: root.feedTitle
 
 		trailingActionBar {
 			actions: [
@@ -67,7 +67,7 @@ Page {
 
 	Connections {
 		target: root.pageStack
-		onCurrentPageChanged: {
+		onPrimaryPageChanged: {
 			if (itemsInit && root.pageStack.currentPage == root) {
 				console.log("Clearing saved feed '" + childOpened.contents["childSelected"] + "' on '" + header.title + "'")
 				settingsDatabase.putDoc({"childSelected": "None"}, childOpened.docId)
