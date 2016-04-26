@@ -32,11 +32,18 @@ Page {
 		}
 		trailingActionBar {
 			actions: [
+				// Far right
 				Action {
 					id: openExternally
-					text: "Open"
+					text: "Open in Browser"
 					iconName: "external-link"
 					onTriggered: Qt.openUrlExternally(storyLink)
+				},
+				Action {
+					id: openInternally
+					text: "Open Here"
+					iconName: "down"
+					onTriggered: webview.url = storyLink
 				}
 			]
 		}
