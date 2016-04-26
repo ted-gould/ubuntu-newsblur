@@ -19,6 +19,26 @@ Page {
 		title: root.folderTitle
 		flickable: listview
 
+		StyleHints {
+			backgroundColor: folderTitle == "NewsBlur" ? "#eeda5b" : UbuntuColors.porcelain
+		}
+
+		leadingActionBar {
+			actions: [
+				Action {
+					id: newsblurIcon
+					visible: header.title == "NewsBlur"
+					iconSource: Qt.resolvedUrl("newsblur-logo.svg")
+				},
+				Action {
+					id: back
+					visible: header.title != "NewsBlur"
+					iconName: "back"
+					onTriggered: root.pageStack.removePages(root)
+				}
+			]
+		}
+
 		trailingActionBar {
 			actions: [
 				Action {
@@ -29,7 +49,6 @@ Page {
 					onTriggered: PopupUtils.open(loginDialog)
 				}
 			]
-
 		}
 	}
 
