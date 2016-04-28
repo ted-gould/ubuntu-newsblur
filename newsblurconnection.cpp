@@ -64,7 +64,7 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
         if (!password.isEmpty()) {
             postData.append(QString("&password=%1").arg(password));
         }
-        qDebug() << "posting" << postData << "to" << request.url();
+        // qDebug() << "posting" << postData << "to" << request.url();
         QNetworkReply *reply = m_nam->post(request, postData);
         connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::loggedIn);
     }
