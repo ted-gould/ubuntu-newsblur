@@ -14,6 +14,7 @@ public:
     QString link;
     QString timestamp;
 	bool read;
+	bool starred;
 	QString imageurl;
 };
 
@@ -29,6 +30,7 @@ public:
     enum Roles {
         RoleTitle,
         RoleHash,
+		RoleStarred,
         RoleContent,
         RoleLink,
         RoleTimestamp,
@@ -60,6 +62,7 @@ signals:
 
 public slots:
 	void markStoryHashRead(const QString &hash);
+	void markStoryHashStarred(const QString &hash);
     void refresh();
 	void markFeedRead();
 
@@ -68,6 +71,7 @@ private slots:
 	void pageUpdateStart();
 	void feedDecremented(int feedId, const QString &hash);
 	void feedReset(int feedId);
+	void storyStarred(int feedId, const QString &hash);
 
 private:
     QVariantList findNode(const QVariantList &folders, const QString &path);

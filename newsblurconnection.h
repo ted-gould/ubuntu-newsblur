@@ -33,6 +33,7 @@ public slots:
     void fetchFeeds();
 	void feedEntries(int feedId, int page = 1);
 	void markStoryHashRead (const QString &hash, int feedId);
+	void markStoryHashStarred (const QString &hash, int feedId);
 	void markFeedRead (int feedId);
 
 private slots:
@@ -41,6 +42,7 @@ private slots:
     void feedsFetched();
     void feedEntriesFetched();
 	void feedMarkedRead();
+	void storyMarkedStarred();
 
 private:
     explicit NewsBlurConnection(QObject *parent = 0);
@@ -54,6 +56,7 @@ signals:
     void errorChanged();
     void feedDecremented(int feedId, const QString &hash);
     void feedReset(int feedId);
+	void storyStarred(int feedId, const QString &hash);
 
 private:
     QNetworkAccessManager *m_nam;
@@ -62,6 +65,8 @@ private:
     QVariant m_feedsData;
 	QString m_error;
 	int m_feedResetId;
+	int m_storyStarredId;
+	QString m_storyStarredHash;
 
 };
 

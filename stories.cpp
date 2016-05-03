@@ -11,6 +11,7 @@ Stories::Stories(QObject *parent) :
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::entriesFetched, this, &Stories::entriesFetched);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Stories::feedDecremented);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedReset, this, &Stories::feedReset);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::storyStarred, this, &Stories::storyStarred);
     connect(this, &Stories::pageUpdateStarted, this, &Stories::pageUpdateStart);
 }
 
@@ -65,6 +66,7 @@ void Stories::entriesFetched(const QVariant &entriesData)
         entry.hash = storymap["story_hash"].toString();
         entry.timestamp = storymap["story_data"].toString();
 		entry.read = storymap["read_status"].toInt() != 0;
+		entry.starred = false; /* TODO */
 
 		QList<QVariant> imagelist = storymap["image_urls"].toList();
 		if (imagelist.size() > 0)
@@ -128,6 +130,8 @@ QVariant Stories::data(const QModelIndex &index, int role) const
         return m_list.at(index.row()).title;
     case RoleHash:
         return m_list.at(index.row()).hash;
+    case RoleStarred:
+        return m_list.at(index.row()).starred;
     case RoleContent:
         return m_list.at(index.row()).content;
     case RoleLink:
@@ -148,6 +152,7 @@ QHash<int, QByteArray> Stories::roleNames() const
     QHash<int, QByteArray> roles;
     roles.insert(RoleTitle, "storytitle");
     roles.insert(RoleHash, "hash");
+    roles.insert(RoleStarred, "starred");
     roles.insert(RoleContent, "content");
     roles.insert(RoleLink, "link");
     roles.insert(RoleTimestamp, "timestamp");
@@ -189,4 +194,26 @@ void Stories::markStoryHashRead(const QString &hash)
 void Stories::markFeedRead ()
 {
 	NewsBlurConnection::instance()->markFeedRead(feedId());
+}
+
+void Stories::markStoryHashStarred(const QString &hash)
+{
+	NewsBlurConnection::instance()->markStoryHashStarred(hash, feedId());
+}
+
+
+void Stories::storyStarred(int feedId, const QString &hash) {
+	if (m_feedId != feedId) {
+		return;
+	}
+
+	QVector<int> roles;
+	roles += RoleStarred;
+
+    for (int i = 0; i < m_list.count(); i++) {
+        if (m_list[i].hash == hash) {
+            m_list[i].starred = true;
+            emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
+        }
+    }
 }

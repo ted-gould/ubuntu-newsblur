@@ -211,6 +211,28 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
     m_nam->post(request, data);
 }
 
+void NewsBlurConnection::markStoryHashStarred(const QString &hash, int feedId)
+{
+	/* Sent the request to the API to mark it as starred on the server */
+    QNetworkRequest request;
+    QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_starred?story_hash=%1").arg(hash);
+    qDebug() << "feed url: " << url;
+    request.setUrl(QUrl(url));
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+	QByteArray data;
+    QNetworkReply * reply = m_nam->post(request, data);
+    connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::storyMarkedStarred);
+	m_storyStarredId = feedId; /* This sucks */
+	m_storyStarredHash = hash; /* This sucks */
+}
+
+void NewsBlurConnection::storyMarkedStarred()
+{
+	qDebug() << "Story starred: " << m_storyStarredHash << " on feed " << m_storyStarredId;
+	emit storyStarred(m_storyStarredId, m_storyStarredHash);
+}
+
 void NewsBlurConnection::markFeedRead(int feedId)
 {
     QNetworkRequest request;
