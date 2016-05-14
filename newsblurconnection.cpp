@@ -9,10 +9,11 @@
 
 NewsBlurConnection* NewsBlurConnection::s_instance = 0;
 
-NewsBlurConnection::NewsBlurConnection(QObject *parent) :
+NewsBlurConnection::NewsBlurConnection(QObject *parent, QString baseurl) :
     QObject(parent),
     m_nam(new QNetworkAccessManager(this)),
-    m_authenticated(false)
+    m_authenticated(false),
+    m_baseurl(baseurl)
 {
 }
 
@@ -57,7 +58,7 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
 
     if (!m_username.isEmpty() && !m_authenticated) {
         QNetworkRequest request;
-        request.setUrl(QUrl("https://newsblur.com/api/login"));
+        request.setUrl(QUrl(m_baseurl + "/api/login"));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
         QByteArray postData;
@@ -74,7 +75,7 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
 void NewsBlurConnection::createUser(const QString &username, const QString &email, const QString &password)
 {
     QNetworkRequest request;
-    request.setUrl(QUrl("https://newsblur.com/api/signup"));
+    request.setUrl(QUrl(m_baseurl + "/api/signup"));
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -130,7 +131,7 @@ void NewsBlurConnection::fetchFeeds()
 {
     qDebug() << "fetching feeds...";
     QNetworkRequest request;
-    request.setUrl(QUrl("https://newsblur.com/reader/feeds"));
+    request.setUrl(QUrl(m_baseurl + "/reader/feeds"));
 
     QNetworkReply *reply = m_nam->get(request);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedsFetched);
@@ -167,7 +168,7 @@ void NewsBlurConnection::feedEntries(int feedId, int page)
     qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/feed/%1?page=%2").arg(feedId).arg(page);
+    QString url = m_baseurl + QString("/reader/feed/%1?page=%2").arg(feedId).arg(page);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 
@@ -203,7 +204,7 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 
 	/* Sent the request to the API to mark it as read on the server */
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
+    QString url = m_baseurl + QString("/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -216,7 +217,7 @@ void NewsBlurConnection::markStoryHashStarred(const QString &hash, int feedId)
 {
 	/* Sent the request to the API to mark it as starred on the server */
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/mark_story_hashes_as_starred?story_hash=%1").arg(hash);
+    QString url = m_baseurl + QString("/reader/mark_story_hashes_as_starred?story_hash=%1").arg(hash);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -237,7 +238,7 @@ void NewsBlurConnection::storyMarkedStarred()
 void NewsBlurConnection::markFeedRead(int feedId)
 {
     QNetworkRequest request;
-    QString url = QString("https://newsblur.com/reader/mark_feed_as_read?feed_id=%1").arg(feedId);
+    QString url = m_baseurl + QString("/reader/mark_feed_as_read?feed_id=%1").arg(feedId);
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -257,7 +258,7 @@ void NewsBlurConnection::feedMarkedRead ()
 void NewsBlurConnection::shareStory (const QString& hash, const QString& comments)
 {
     QNetworkRequest request;
-	QUrl url = QUrl("https://newsblur.com/social/share_story");
+	QUrl url = QUrl(m_baseurl + "/social/share_story");
 
 	QUrlQuery query = QUrlQuery();
 	query.addQueryItem("story_hash", hash);

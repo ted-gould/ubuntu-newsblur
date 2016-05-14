@@ -47,7 +47,7 @@ private slots:
 	void storyShared();
 
 private:
-    explicit NewsBlurConnection(QObject *parent = 0);
+    explicit NewsBlurConnection(QObject *parent = 0, QString baseurl = "https://newsblur.com");
     static NewsBlurConnection *s_instance;
 
 signals:
@@ -63,9 +63,10 @@ signals:
 private:
     QNetworkAccessManager *m_nam;
     bool m_authenticated;
+    QString m_baseurl;
     QString m_username;
     QVariant m_feedsData;
-	QString m_error;
+    QString m_error;
 	int m_feedResetId;
 	int m_storyStarredId;
 	QString m_storyStarredHash;
