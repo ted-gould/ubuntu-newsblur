@@ -1,6 +1,7 @@
 import QtQuick 2.4
 import Ubuntu.Components 1.3
 import Ubuntu.Components.ListItems 1.3
+import Ubuntu.Components.Popups 1.3
 import NewsBlur 0.1
 import Ubuntu.Web 0.2
 
@@ -10,6 +11,7 @@ Page {
 	property string storyTitle
 	property string storyContent
 	property string storyLink
+	property string storyHash
 
 	header: PageHeader {
 		title: webview.canGoBack ? webview.title : storyTitle
@@ -44,8 +46,38 @@ Page {
 					text: "Open Here"
 					iconName: "down"
 					onTriggered: webview.url = storyLink
+				},
+				Action {
+					id: shareNewsblur
+					text: "Share on Newsblur"
+					iconName: "share" // TODO: We need a different icon
+					onTriggered: PopupUtils.open(shareDialog)
 				}
 			]
+		}
+	}
+
+	Component {
+		id: shareDialog
+		Dialog {
+			id: shareDialogInstance
+			title: "Share Story"
+
+			TextArea {
+				id: shareComment
+				placeholderText: "Comment"
+			}
+			Button {
+				text: "Share"
+				onClicked: {
+					PopupUtils.close(shareDialogInstance)
+					NewsBlur.shareStory(story.storyHash, shareComment.text)
+				}
+			}
+			Button {
+				text: "Cancel"
+				onClicked: PopupUtils.close(shareDialogInstance)
+			}
 		}
 	}
 

@@ -35,6 +35,7 @@ public slots:
 	void markStoryHashRead (const QString &hash, int feedId);
 	void markStoryHashStarred (const QString &hash, int feedId);
 	void markFeedRead (int feedId);
+	void shareStory (const QString& hash, const QString& comments);
 
 private slots:
     void userCreated();
@@ -43,6 +44,7 @@ private slots:
     void feedEntriesFetched();
 	void feedMarkedRead();
 	void storyMarkedStarred();
+	void storyShared();
 
 private:
     explicit NewsBlurConnection(QObject *parent = 0);

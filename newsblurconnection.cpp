@@ -5,6 +5,7 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QDebug>
+#include <QUrlQuery>
 
 NewsBlurConnection* NewsBlurConnection::s_instance = 0;
 
@@ -251,4 +252,35 @@ void NewsBlurConnection::feedMarkedRead ()
 {
 	qDebug() << "Feed Reset: " << m_feedResetId;
 	emit feedReset(m_feedResetId);
+}
+
+void NewsBlurConnection::shareStory (const QString& hash, const QString& comments)
+{
+    QNetworkRequest request;
+	QUrl url = QUrl("https://newsblur.com/social/share_story");
+
+	QUrlQuery query = QUrlQuery();
+	query.addQueryItem("story_hash", hash);
+	query.addQueryItem("comments", comments);
+
+	url.setQuery(query);
+
+    qDebug() << "feed url: " << url;
+    request.setUrl(url);
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+	QByteArray data;
+    QNetworkReply * reply = m_nam->post(request, data);
+    connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::storyShared);
+}
+
+void NewsBlurConnection::storyShared (void)
+{
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Error sharing story" << reply->errorString();
+        return;
+    }
+
+	return;
 }

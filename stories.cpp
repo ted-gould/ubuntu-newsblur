@@ -56,7 +56,7 @@ void Stories::entriesFetched(const QVariant &entriesData)
 	beginInsertRows(QModelIndex(), m_list.count(), m_list.count() + storyData.count() - 1);
 
     foreach (const QVariant &story, storyData) {
-		//qDebug() << "Story info: " << story;
+		qDebug() << "Story info: " << story;
         QVariantMap storymap = story.toMap();
         StoryEntry entry;
 
