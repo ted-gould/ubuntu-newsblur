@@ -231,8 +231,14 @@ void NewsBlurConnection::markStoryHashStarred(const QString &hash, int feedId)
 
 void NewsBlurConnection::storyMarkedStarred()
 {
-	qDebug() << "Story starred: " << m_storyStarredHash << " on feed " << m_storyStarredId;
-	emit storyStarred(m_storyStarredId, m_storyStarredHash);
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Unable to reset feed" << m_feedResetId << ":" << reply->errorString();
+        return;
+    } else {
+		qDebug() << "Story starred: " << m_storyStarredHash << " on feed " << m_storyStarredId;
+		emit storyStarred(m_storyStarredId, m_storyStarredHash);
+	}
 }
 
 void NewsBlurConnection::markFeedRead(int feedId)
@@ -251,8 +257,14 @@ void NewsBlurConnection::markFeedRead(int feedId)
 
 void NewsBlurConnection::feedMarkedRead ()
 {
-	qDebug() << "Feed Reset: " << m_feedResetId;
-	emit feedReset(m_feedResetId);
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Unable to reset feed" << m_feedResetId << ":" << reply->errorString();
+        return;
+    } else {
+		qDebug() << "Feed Reset: " << m_feedResetId;
+		emit feedReset(m_feedResetId);
+	}
 }
 
 void NewsBlurConnection::shareStory (const QString& hash, const QString& comments)
