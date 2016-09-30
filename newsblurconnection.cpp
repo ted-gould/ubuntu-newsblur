@@ -277,13 +277,13 @@ void NewsBlurConnection::shareStory (int feedId, const QString& story, const QSt
 	query.addQueryItem("story_id", story);
 	query.addQueryItem("comments", comments);
 
-	url.setQuery(query);
+	QByteArray data;
+	data.append(query.query());
 
     qDebug() << "share url: " << url;
     request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-	QByteArray data;
     QNetworkReply * reply = m_nam->post(request, data);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::storyShared);
 }
