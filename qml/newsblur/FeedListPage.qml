@@ -122,7 +122,7 @@ Page {
 
             onClicked: {
 				 listview.currentIndex = index
-                 root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content, storyHash: hash});
+                 root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {feedId: root.feedId, storyTitle: storytitle, storyLink: link, storyContent: content, storyHash: hash});
 				 if (!read)
 					 stories.markStoryHashRead(hash);
             }
@@ -130,7 +130,7 @@ Page {
 			Component.onCompleted: {
 				itemsInit = true
 				if (childOpened.contents["childSelected"] == storytitle) {
-					root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {storyTitle: storytitle, storyLink: link, storyContent: content, storyHash: hash});
+					root.pageStack.addPageToNextColumn(root, Qt.resolvedUrl("StoryPage.qml"), {feedId: root.feedId, storyTitle: storytitle, storyLink: link, storyContent: content, storyHash: hash});
 				}
 			}
         }

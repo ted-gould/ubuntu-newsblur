@@ -8,6 +8,7 @@ import Ubuntu.Web 0.2
 Page {
 	id: story
 	
+	property int feedId
 	property string storyTitle
 	property string storyContent
 	property string storyLink
@@ -71,7 +72,7 @@ Page {
 				text: "Share"
 				onClicked: {
 					PopupUtils.close(shareDialogInstance)
-					NewsBlur.shareStory(story.storyHash, shareComment.text)
+					NewsBlur.shareStory(story.feedId, story.storyLink, shareComment.text)
 				}
 			}
 			Button {

@@ -35,7 +35,7 @@ public slots:
 	void markStoryHashRead (const QString &hash, int feedId);
 	void markStoryHashStarred (const QString &hash, int feedId);
 	void markFeedRead (int feedId);
-	void shareStory (const QString& hash, const QString& comments);
+	void shareStory (int feedId, const QString& story, const QString& comments);
 
 private slots:
     void userCreated();

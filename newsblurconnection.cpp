@@ -267,18 +267,19 @@ void NewsBlurConnection::feedMarkedRead ()
 	}
 }
 
-void NewsBlurConnection::shareStory (const QString& hash, const QString& comments)
+void NewsBlurConnection::shareStory (int feedId, const QString& story, const QString& comments)
 {
     QNetworkRequest request;
 	QUrl url = QUrl(m_baseurl + "/social/share_story");
 
 	QUrlQuery query = QUrlQuery();
-	query.addQueryItem("story_hash", hash);
+	query.addQueryItem("feed_id", QString::number(feedId));
+	query.addQueryItem("story_id", story);
 	query.addQueryItem("comments", comments);
 
 	url.setQuery(query);
 
-    qDebug() << "feed url: " << url;
+    qDebug() << "share url: " << url;
     request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
