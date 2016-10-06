@@ -227,7 +227,23 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QByteArray data;
-    m_nam->post(request, data);
+    QNetworkReply * reply = m_nam->post(request, data);
+    connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::storyMarkedRead);
+
+	m_storyReadId = feedId; /* This sucks */
+	m_storyReadHash = hash; /* This sucks */
+}
+
+void NewsBlurConnection::storyMarkedRead()
+{
+    QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+    if (reply->error() != QNetworkReply::NoError) {
+        qWarning() << "Unable to mark read " << m_storyReadId << ", " << m_storyReadHash << ":" << reply->errorString();
+        return;
+    } else {
+		qDebug() << "Story read: " << m_storyReadHash << " on feed " << m_storyReadId;
+		emit storyRead(m_storyReadId, m_storyReadHash);
+	}
 }
 
 void NewsBlurConnection::markStoryHashStarred(const QString &hash, int feedId)

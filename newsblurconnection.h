@@ -44,6 +44,7 @@ private slots:
     void feedEntriesFetched();
 	void feedMarkedRead();
 	void storyMarkedStarred();
+	void storyMarkedRead();
 	void storyShared();
 
 private:
@@ -59,6 +60,7 @@ signals:
     void feedDecremented(int feedId, const QString &hash);
     void feedReset(int feedId);
 	void storyStarred(int feedId, const QString &hash);
+	void storyRead(int feedId, const QString &hash);
 
 private:
     QNetworkAccessManager *m_nam;
@@ -70,6 +72,8 @@ private:
 	int m_feedResetId;
 	int m_storyStarredId;
 	QString m_storyStarredHash;
+	int m_storyReadId;
+	QString m_storyReadHash;
 
 };
 
