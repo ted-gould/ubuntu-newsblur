@@ -175,9 +175,14 @@ void NewsBlurConnection::feedEntries(int feedId, int page)
     qDebug() << "getting results for feed " << feedId;
 
     QNetworkRequest request;
-    QString url = m_baseurl + QString("/reader/feed/%1?page=%2").arg(feedId).arg(page);
+    QUrl url(m_baseurl + QString("/reader/feed/%1").arg(feedId));
+
+	QUrlQuery query;
+	query.addQueryItem("page", QString::number(page));
+	url.setQuery(query);
+
     qDebug() << "feed url: " << url;
-    request.setUrl(QUrl(url));
+    request.setUrl(url);
 
     QNetworkReply *reply = m_nam->get(request);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedEntriesFetched);
@@ -211,7 +216,12 @@ void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 
 	/* Sent the request to the API to mark it as read on the server */
     QNetworkRequest request;
-    QString url = m_baseurl + QString("/reader/mark_story_hashes_as_read?story_hash=%1").arg(hash);
+    QUrl url(m_baseurl + QString("/reader/mark_story_hashes_as_read"));
+
+	QUrlQuery query;
+	query.addQueryItem("story_hash", hash);
+	url.setQuery(query);
+
     qDebug() << "feed url: " << url;
     request.setUrl(QUrl(url));
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -224,9 +234,14 @@ void NewsBlurConnection::markStoryHashStarred(const QString &hash, int feedId)
 {
 	/* Sent the request to the API to mark it as starred on the server */
     QNetworkRequest request;
-    QString url = m_baseurl + QString("/reader/mark_story_hashes_as_starred?story_hash=%1").arg(hash);
+    QUrl url(m_baseurl + QString("/reader/mark_story_hashes_as_starred"));
+
+	QUrlQuery query;
+	query.addQueryItem("story_hash", hash);
+	url.setQuery(query);
+
     qDebug() << "feed url: " << url;
-    request.setUrl(QUrl(url));
+    request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QByteArray data;
@@ -251,9 +266,14 @@ void NewsBlurConnection::storyMarkedStarred()
 void NewsBlurConnection::markFeedRead(int feedId)
 {
     QNetworkRequest request;
-    QString url = m_baseurl + QString("/reader/mark_feed_as_read?feed_id=%1").arg(feedId);
+    QUrl url(m_baseurl + QString("/reader/mark_feed_as_read"));
+
+	QUrlQuery query;
+	query.addQueryItem("feed_id", QString::number(feedId));
+	url.setQuery(query);
+
     qDebug() << "feed url: " << url;
-    request.setUrl(QUrl(url));
+    request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
 	QByteArray data;
