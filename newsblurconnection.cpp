@@ -61,11 +61,15 @@ void NewsBlurConnection::login(const QString &username, const QString &password)
         request.setUrl(QUrl(m_baseurl + "/api/login"));
         request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-        QByteArray postData;
-        postData.append(QString("username=%1").arg(m_username));
+		QUrlQuery query = QUrlQuery();
+		query.addQueryItem("username", m_username);
         if (!password.isEmpty()) {
-            postData.append(QString("&password=%1").arg(password));
-        }
+			query.addQueryItem("password", password);
+		}
+
+        QByteArray postData;
+		postData.append(query.query());
+
         // qDebug() << "posting" << postData << "to" << request.url();
         QNetworkReply *reply = m_nam->post(request, postData);
         connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::loggedIn);
@@ -79,12 +83,15 @@ void NewsBlurConnection::createUser(const QString &username, const QString &emai
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
-    QByteArray postData;
-    postData.append(QString("username=%1").arg(username));
-    postData.append(QString("&email=%1").arg(email));
-    if (!password.isEmpty()) {
-        postData.append(QString("&password=%1").arg(password));
-    }
+	QUrlQuery query = QUrlQuery();
+	query.addQueryItem("username", m_username);
+	query.addQueryItem("email", email);
+	if (!password.isEmpty()) {
+		query.addQueryItem("password", password);
+	}
+
+	QByteArray postData;
+	postData.append(query.query());
 
     QNetworkReply *reply = m_nam->post(request, postData);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::userCreated);
@@ -294,7 +301,9 @@ void NewsBlurConnection::storyShared (void)
     if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "Error sharing story" << reply->errorString();
         return;
-    }
+    } else {
+		qDebug() << "Story Shared";
+	}
 
 	return;
 }
