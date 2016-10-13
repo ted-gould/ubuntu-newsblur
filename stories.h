@@ -69,7 +69,7 @@ public slots:
 private slots:
     void entriesFetched(const QVariant &entriesData);
 	void pageUpdateStart();
-	void feedDecremented(int feedId, const QString &hash);
+	void storyRead(int feedId, const QString &hash);
 	void feedReset(int feedId);
 	void storyStarred(int feedId, const QString &hash);
 

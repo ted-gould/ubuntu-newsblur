@@ -211,9 +211,6 @@ void NewsBlurConnection::feedEntriesFetched()
 
 void NewsBlurConnection::markStoryHashRead(const QString &hash, int feedId)
 {
-	/* Mark the story as read in the read count for the feed */
-    emit feedDecremented(feedId, hash);
-
 	/* Sent the request to the API to mark it as read on the server */
     QNetworkRequest request;
     QUrl url(m_baseurl + QString("/reader/mark_story_hashes_as_read"));

@@ -8,8 +8,8 @@ Feeds::Feeds(QObject *parent) :
     QAbstractListModel(parent)
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedsUpdated, this, &Feeds::feedsUpdated);
-    connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Feeds::feedDecremented);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedReset, this, &Feeds::feedReset);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::storyRead, this, &Feeds::storyRead);
 }
 
 void Feeds::componentComplete()
@@ -24,20 +24,6 @@ void Feeds::feedsUpdated(const QVariant &feedsData)
     refresh();
 }
 
-void Feeds::feedDecremented(int feedId)
-{
-	QVector<int> roles;
-	roles += RoleUnread;
-	roles += RoleUnreadStr;
-
-    for (int i = 0; i < m_list.count(); i++) {
-        if (m_list[i].id == feedId) {
-            m_list[i].unread--;
-            emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
-        }
-    }
-}
-
 void Feeds::feedReset(int feedId)
 {
 	QVector<int> roles;
@@ -47,6 +33,20 @@ void Feeds::feedReset(int feedId)
     for (int i = 0; i < m_list.count(); i++) {
         if (m_list[i].id == feedId) {
             m_list[i].unread = 0;
+            emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
+        }
+    }
+}
+
+void Feeds::storyRead(int feedId, const QString &hash)
+{
+	QVector<int> roles;
+	roles += RoleUnread;
+	roles += RoleUnreadStr;
+
+    for (int i = 0; i < m_list.count(); i++) {
+        if (m_list[i].id == feedId) {
+            m_list[i].unread--;
             emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
         }
     }

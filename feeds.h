@@ -47,7 +47,7 @@ signals:
 private slots:
     void refresh();
     void feedsUpdated(const QVariant &feedsData);
-    void feedDecremented(int feedId);
+    void storyRead(int feedId, const QString &hash);
     void feedReset(int feedId);
 
 private:

@@ -9,7 +9,7 @@ Stories::Stories(QObject *parent) :
     QAbstractListModel(parent)
 {
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::entriesFetched, this, &Stories::entriesFetched);
-    connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedDecremented, this, &Stories::feedDecremented);
+    connect(NewsBlurConnection::instance(), &NewsBlurConnection::storyRead, this, &Stories::storyRead);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedReset, this, &Stories::feedReset);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::storyStarred, this, &Stories::storyStarred);
     connect(this, &Stories::pageUpdateStarted, this, &Stories::pageUpdateStart);
@@ -19,7 +19,7 @@ void Stories::componentComplete()
 {
 }
 
-void Stories::feedDecremented(int feedId, const QString &hash) {
+void Stories::storyRead (int feedId, const QString &hash) {
 	if (m_feedId != feedId) {
 		return;
 	}
