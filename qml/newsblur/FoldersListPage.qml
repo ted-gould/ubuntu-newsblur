@@ -121,9 +121,36 @@ Page {
 		}
 
         delegate: ListItem {
+			id: folderitem
+
 			ListItemLayout {
-				title.text: feedtitle + " (" + unread + ")"
+				title.text: feedtitle
 				title.elide: Text.ElideRight
+
+				UbuntuShape {
+					id: ushape
+					height: folderitem.height * 0.5
+					width: folderitem.height * 0.7
+
+					visible: true
+
+					SlotsLayout.position: SlotsLayout.Trailing
+
+					Rectangle {
+						anchors.fill: parent
+						color: UbuntuColors.warmGrey
+
+						Text {
+							anchors {
+								verticalCenter: parent.verticalCenter
+								horizontalCenter: parent.horizontalCenter
+							}
+							text: unread
+							color: UbuntuColors.porcelain
+							font.bold: true
+						}
+					}
+				}
 
 				ProgressionSlot {}
 			}
