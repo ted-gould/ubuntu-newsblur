@@ -143,6 +143,9 @@ Page {
 			Icon {
 				visible: !stories.storiesAvailable
 				source: Qt.resolvedUrl('newsblur-footer.png')
+				anchors {
+					horizontalCenter: root.horizontalCenter
+				}
 			}
 		}
 	}
