@@ -17,9 +17,8 @@ void Feeds::componentComplete()
     refresh();
 }
 
-void Feeds::feedsUpdated(const QVariant &feedsData)
+void Feeds::feedsUpdated()
 {
-    Q_UNUSED(feedsData)
     qDebug() << "feeds updated";
     refresh();
 }
@@ -52,101 +51,72 @@ void Feeds::storyRead(int feedId, const QString &hash)
     }
 }
 
-void Feeds::refresh() {
-
-    qDebug() << "refreshing for folderNode" << m_filterPath;
-
-    QVariantList folders = NewsBlurConnection::instance()->feedsData().toMap().value("folders").toList();
-    QVariantList folderNode;
-    if (m_filterPath.isEmpty()) {
-        folderNode = folders;
-    } else {
-        folderNode = findNode(folders, m_filterPath);
-    }
-    updateFromFolderNode(folderNode);
-
-}
-
-QVariantList Feeds::findNode(const QVariantList &folders, const QString &path)
-{
-    QString currentFindDir = path;
-    currentFindDir.remove(QRegExp("^/"));
-    currentFindDir = currentFindDir.split('/').first();
-
-    QString nextFindDir = path;
-    nextFindDir.remove(QRegExp("^/"));
-    if (nextFindDir.contains('/')) {
-        nextFindDir.remove(QRegExp(".*/"));
-    } else {
-        nextFindDir.clear();
-    }
-
-    qDebug() << "searching for dir" << path << currentFindDir << nextFindDir;
-    foreach (const QVariant &folderListEntry, folders) {
-        bool canConvert;
-        folderListEntry.toInt(&canConvert);
-        if (!canConvert) {
-            QString folderEntry = folderListEntry.toMap().keys().first();
-            if (folderEntry == currentFindDir) {
-                qDebug() << "got folder entry" << nextFindDir;
-                if (nextFindDir.isEmpty()) {
-                    return folderListEntry.toMap().values().first().toList();
-                }
-                return findNode(folderListEntry.toMap().values().first().toList(), nextFindDir);
-            }
-        }
-    }
-
-    return QVariantList();
-}
-
-bool EntryCompare (const Entry& a, const Entry& b)
+bool Feeds::entryCompare (const Entry& a, const Entry& b)
 {
 	return a.title < b.title;
 }
 
-void Feeds::updateFromFolderNode(const QVariantList &folderNode)
-{
+void Feeds::refresh() {
+    qDebug() << "refreshing for folder: " << folderName();
+
     beginResetModel();
 
     m_list.clear();
 
-    QVariantMap feeds = NewsBlurConnection::instance()->feedsData().toMap().value("feeds").toMap();
-    foreach (const QVariant &folderListEntry, folderNode) {
-        bool canConvert;
-        int feedId = folderListEntry.toInt(&canConvert);
-        if (canConvert) {
-            Entry entry;
-            entry.id = feedId;
-            entry.title = feeds.value(QString::number(feedId)).toMap().value("feed_title").toString();
-            entry.isFolder = false;
-			entry.unread = feeds.value(QString::number(feedId)).toMap().value("nt").toInt();
-            if (entry.title != "") {
-                m_list.append(entry);
-                qDebug() << "Feed (" << feedId << "):" << entry.title;
-            } else {
-                qDebug() << "Feed (" << feedId << "): Skipping empty title";
-            }
-        } else {
-            Entry entry;
-            entry.id = feedId;
-            entry.title = folderListEntry.toMap().keys().first();
-            entry.isFolder = true;
-			entry.unread = 0;
+    if (folderName() == "") {
+		entriesFromFolders();
+	} else {
+		bool found = false;
 
-            if (entry.title != "") {
-                m_list.append(entry);
-            } else {
-                qDebug() << "Feed (" << feedId << "): Skipping empty title";
-            }
-        }
+		foreach(const NewsBlurConnection::Folder &thisfolder, NewsBlurConnection::instance()->foldersData()) {
+			if (thisfolder.name == m_folderName) {
+				entriesFromFolder(thisfolder);	
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			qWarning() << "Unable to find folder:" << m_folderName;
+		}
     }
 
-	qSort(m_list.begin(), m_list.end(), EntryCompare);
+	qSort(m_list.begin(), m_list.end(), entryCompare);
 
     endResetModel();
 }
 
+void Feeds::entriesFromFolders()
+{
+	foreach(const NewsBlurConnection::Folder &folder, NewsBlurConnection::instance()->foldersData()) {
+		Entry entry;
+
+		entry.title = folder.name;
+		entry.isFolder = true;
+		entry.unread = 0; // TODO: Fix this
+
+		m_list.append(entry);
+	}
+}
+
+void Feeds::entriesFromFolder(const NewsBlurConnection::Folder &folder)
+{
+	QHash<int, NewsBlurConnection::Feed> feeds = NewsBlurConnection::instance()->feedsData();
+	qDebug() << "Looking at folder: " << folder.name;
+
+	foreach(int feed, folder.feeds) {
+		Entry entry;
+
+		entry.title = feeds[feed].name;
+		entry.isFolder = false;
+		entry.id = feeds[feed].id;
+		entry.unread = feeds[feed].unread;
+
+		m_list.append(entry);
+
+		qDebug() << "\tfeed name" << feeds[feed].name;
+	}
+}
 
 int Feeds::rowCount(const QModelIndex & /*parent*/) const
 {
@@ -187,16 +157,17 @@ QHash<int, QByteArray> Feeds::roleNames() const
     return roles;
 }
 
-QString Feeds::filterPath() const
+QString Feeds::folderName() const
 {
-    return m_filterPath;
+    return m_folderName;
 }
 
-void Feeds::setFilterPath(const QString &filterPath)
+void Feeds::setFolderName(const QString &folderName)
 {
-    if (m_filterPath != filterPath) {
-        m_filterPath = filterPath;
-        emit filterPathChanged();
+	qDebug() << "Setting folder name:" << folderName;
+    if (m_folderName != folderName) {
+        m_folderName = folderName;
+        emit folderNameChanged();
         refresh();
     }
 }

@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QQmlParserStatus>
 
+#include "newsblurconnection.h"
 
 class Entry {
 public:
@@ -17,7 +18,7 @@ class Feeds : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString filterPath READ filterPath WRITE setFilterPath NOTIFY filterPathChanged)
+    Q_PROPERTY(QString folderName READ folderName WRITE setFolderName NOTIFY folderNameChanged)
 
 public:
     enum Roles {
@@ -34,29 +35,31 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const;
 
-    QString filterPath() const;
-    void setFilterPath(const QString &filterPath);
+    QString folderName () const;
+    void folderNamePath(const QString &folderName);
+	void setFolderName(const QString &folderName);
 
 protected:
     void componentComplete();
     void classBegin() {}
 
 signals:
-    void filterPathChanged();
+    void folderNameChanged();
 
 private slots:
     void refresh();
-    void feedsUpdated(const QVariant &feedsData);
+    void feedsUpdated();
     void storyRead(int feedId, const QString &hash);
     void feedReset(int feedId);
 
-private:
-    QVariantList findNode(const QVariantList &folders, const QString &path);
-    void updateFromFolderNode(const QVariantList &folderNode);
 
 private:
     QList<Entry> m_list;
-    QString m_filterPath;
+    QString m_folderName;
+
+	static bool entryCompare (const Entry& a, const Entry& b);
+	void entriesFromFolders();
+	void entriesFromFolder(const NewsBlurConnection::Folder &folder);
 };
 
 #endif // FEEDS_H

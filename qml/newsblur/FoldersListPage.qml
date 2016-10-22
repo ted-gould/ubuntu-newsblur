@@ -7,7 +7,7 @@ import U1db 1.0 as U1db
 Page {
     id: root
 
-    property string folderPath
+    property string folderName
 	property bool itemsInit: false
 	property string  queuedPushPath: ""
 	property variant queuedPushProps
@@ -108,7 +108,7 @@ Page {
         anchors.fill: parent
         Feeds {
 			id: feedModel
-            filterPath: folderPath
+            folderName: root.folderName
         }
 
 		model: SortFilterModel {
@@ -133,7 +133,7 @@ Page {
 
                 if (isFolder) {
                     root.pageStack.addPageToCurrentColumn(root, Qt.resolvedUrl("FoldersListPage.qml"), {
-						folderPath: root.folderPath + '/' + feedtitle,
+						folderName: feedtitle,
 						folderTitle: feedtitle
 					})
                 } else {
@@ -149,7 +149,7 @@ Page {
 					if (isFolder) {
 						queuedPushPath = Qt.resolvedUrl("FoldersListPage.qml")
 						queuedPushProps = {
-							folderPath: root.folderPath + '/' + feedtitle,
+							folderName: feedtitle,
 							folderTitle: feedtitle
 						}
 					} else {

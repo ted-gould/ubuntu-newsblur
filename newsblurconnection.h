@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QList>
 
 class QNetworkAccessManager;
 
@@ -22,7 +23,19 @@ public:
 
     bool authenticated() const;
 
-    QVariant feedsData() const;
+	struct Feed {
+		int id;
+		QString name;
+		int unread;
+	};
+
+	struct Folder {
+		QString name;
+		QList<int> feeds;
+	};
+
+    QHash<int, Feed> feedsData() const;
+	QList<Folder> foldersData() const;
 
     QString error() const;
     void setError(const QString &error);
@@ -54,7 +67,7 @@ private:
 signals:
     void usernameChanged();
     void authenticatedChanged();
-    void feedsUpdated(const QVariant &feedsData);
+    void feedsUpdated();
     void entriesFetched(const QVariant &entriesData);
     void errorChanged();
     void feedReset(int feedId);
@@ -66,7 +79,8 @@ private:
     bool m_authenticated;
     QString m_baseurl;
     QString m_username;
-    QVariant m_feedsData;
+    QHash<int, Feed> m_feedsData;
+	QList<Folder> m_foldersData;
     QString m_error;
 	int m_feedResetId;
 	int m_storyStarredId;

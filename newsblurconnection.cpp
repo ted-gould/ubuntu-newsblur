@@ -160,14 +160,51 @@ void NewsBlurConnection::feedsFetched()
         return;
     }
 
-	m_feedsData = jsonDoc.toVariant();
+	QVariantMap variantfeeds = jsonDoc.toVariant().toMap();
 
-    emit feedsUpdated(m_feedsData);
+	m_foldersData.clear();
+	QVariantList foldersList = variantfeeds.value("folders").toList();
+	foreach (const QVariant &folderEntry, foldersList) {
+		QVariantMap folderMap = folderEntry.toMap();
+		QString name = folderMap.keys().first();
+		QVariantList feedsList = folderMap.values().first().toList();
+		QList<int> feedsVect;
+
+		foreach (const QVariant &feedId, feedsList) {
+			feedsVect.append(feedId.toInt());
+		}
+
+		NewsBlurConnection::Folder folder;
+		folder.name = name;
+		folder.feeds = feedsVect;
+
+		m_foldersData.append(folder);
+	}
+
+	m_feedsData.clear();
+	QVariantMap feedsMap = variantfeeds.value("feeds").toMap();
+	foreach (const QVariant &feedEntry, feedsMap) {
+		QVariantMap feedMap = feedEntry.toMap();
+
+		NewsBlurConnection::Feed feed;
+		feed.id = feedMap.value("id").toInt();
+		feed.name = feedMap.value("feed_title").toString();
+		feed.unread = feedMap.value("nt").toInt();
+
+		m_feedsData.insert(feed.id, feed);
+	}
+
+    emit feedsUpdated();
 }
 
-QVariant NewsBlurConnection::feedsData() const
+QHash<int, NewsBlurConnection::Feed> NewsBlurConnection::feedsData() const
 {
     return m_feedsData;
+}
+
+QList<NewsBlurConnection::Folder> NewsBlurConnection::foldersData() const
+{
+    return m_foldersData;
 }
 
 void NewsBlurConnection::feedEntries(int feedId, int page)
