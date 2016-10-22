@@ -343,6 +343,7 @@ void NewsBlurConnection::feedMarkedRead ()
         return;
     } else {
 		qDebug() << "Feed Reset: " << m_feedResetId;
+		m_feedsData[m_feedResetId].unread = 0;
 		emit feedReset(m_feedResetId);
 	}
 }

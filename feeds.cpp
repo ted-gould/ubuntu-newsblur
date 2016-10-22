@@ -7,6 +7,8 @@
 Feeds::Feeds(QObject *parent) :
     QAbstractListModel(parent)
 {
+	m_nullfolder.name = "";
+
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedsUpdated, this, &Feeds::feedsUpdated);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::feedReset, this, &Feeds::feedReset);
     connect(NewsBlurConnection::instance(), &NewsBlurConnection::storyRead, this, &Feeds::storyRead);
@@ -25,15 +27,27 @@ void Feeds::feedsUpdated()
 
 void Feeds::feedReset(int feedId)
 {
+	qDebug() << "Feeds reset gotten by:" << m_folderName;
 	QVector<int> roles;
 	roles += RoleUnread;
 	roles += RoleUnreadStr;
 
     for (int i = 0; i < m_list.count(); i++) {
+		bool changed = false;
+
         if (m_list[i].id == feedId) {
             m_list[i].unread = 0;
+			changed = true;
+        } else if (m_list[i].isFolder) {
+			const NewsBlurConnection::Folder &folder = findFolder(m_list[i].title);
+			if (folder.name != "" && folderHasFeed(folder, feedId)) {
+				m_list[i].unread = calculateFolderUnread(folder);
+				changed = true;
+			}
+		}
+
+		if (changed)
             emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
-        }
     }
 }
 
@@ -44,10 +58,21 @@ void Feeds::storyRead(int feedId, const QString &hash)
 	roles += RoleUnreadStr;
 
     for (int i = 0; i < m_list.count(); i++) {
+		bool changed = false;
+
         if (m_list[i].id == feedId) {
             m_list[i].unread--;
+			changed = true;
+        } else if (m_list[i].isFolder) {
+			const NewsBlurConnection::Folder & folder = findFolder(m_list[i].title);
+			if (folder.name != "" && folderHasFeed(folder, feedId)) {
+				m_list[i].unread = calculateFolderUnread(folder);
+				changed = true;
+			}
+		}
+
+		if (changed)
             emit dataChanged(createIndex(i, 0), createIndex(i, 0), roles);
-        }
     }
 }
 
@@ -66,17 +91,11 @@ void Feeds::refresh() {
     if (folderName() == "") {
 		entriesFromFolders();
 	} else {
-		bool found = false;
-
-		foreach(const NewsBlurConnection::Folder &thisfolder, NewsBlurConnection::instance()->foldersData()) {
-			if (thisfolder.name == m_folderName) {
-				entriesFromFolder(thisfolder);	
-				found = true;
-				break;
-			}
-		}
-
-		if (!found) {
+		const NewsBlurConnection::Folder &folder = findFolder(m_folderName);
+		
+		if (folder.name != "") {
+			entriesFromFolder(folder);	
+		} else {
 			qWarning() << "Unable to find folder:" << m_folderName;
 		}
     }
@@ -86,6 +105,40 @@ void Feeds::refresh() {
     endResetModel();
 }
 
+const NewsBlurConnection::Folder& Feeds::findFolder (const QString &name)
+{
+	foreach(const NewsBlurConnection::Folder &thisfolder, NewsBlurConnection::instance()->foldersData()) {
+		if (thisfolder.name == name) {
+			return thisfolder;
+		}
+	}
+
+	return m_nullfolder;
+}
+
+int Feeds::calculateFolderUnread (const NewsBlurConnection::Folder &folder)
+{
+	qDebug() << "Calculating unread for: " << folder.name;
+
+	int retval = 0;
+	QHash<int, NewsBlurConnection::Feed> feeds = NewsBlurConnection::instance()->feedsData();
+
+	foreach(int feed, folder.feeds) {
+		retval += feeds[feed].unread;
+	}
+
+	return retval;
+}
+
+bool Feeds::folderHasFeed (const NewsBlurConnection::Folder &folder, int infeed)
+{
+	foreach(int feed, folder.feeds) {
+		if (feed == infeed)
+			return true;
+	}
+	return false;
+}
+
 void Feeds::entriesFromFolders()
 {
 	foreach(const NewsBlurConnection::Folder &folder, NewsBlurConnection::instance()->foldersData()) {
@@ -93,7 +146,9 @@ void Feeds::entriesFromFolders()
 
 		entry.title = folder.name;
 		entry.isFolder = true;
-		entry.unread = 0; // TODO: Fix this
+		entry.unread = 0;
+		entry.id = 0;
+		entry.unread = calculateFolderUnread(folder);
 
 		m_list.append(entry);
 	}
@@ -134,7 +189,7 @@ QVariant Feeds::data(const QModelIndex &index, int role) const
         return m_list.at(index.row()).unread;
     case RoleUnreadStr:
 		const Entry &entry = m_list.at(index.row());
-        if (entry.unread > 0 || entry.isFolder) {
+        if (entry.unread > 0) {
 			return "someunread";
 		} else {
 			return "noneunread";

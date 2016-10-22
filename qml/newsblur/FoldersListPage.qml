@@ -122,7 +122,7 @@ Page {
 
         delegate: ListItem {
 			ListItemLayout {
-				title.text: feedtitle
+				title.text: feedtitle + " (" + unread + ")"
 				title.elide: Text.ElideRight
 
 				ProgressionSlot {}

@@ -56,10 +56,14 @@ private slots:
 private:
     QList<Entry> m_list;
     QString m_folderName;
+	NewsBlurConnection::Folder m_nullfolder;
 
 	static bool entryCompare (const Entry& a, const Entry& b);
 	void entriesFromFolders();
 	void entriesFromFolder(const NewsBlurConnection::Folder &folder);
+	const NewsBlurConnection::Folder& findFolder (const QString &name);
+	int calculateFolderUnread (const NewsBlurConnection::Folder &folder);
+	bool folderHasFeed (const NewsBlurConnection::Folder &folder, int feedId);
 };
 
 #endif // FEEDS_H
