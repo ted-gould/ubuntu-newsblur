@@ -276,6 +276,9 @@ void NewsBlurConnection::storyMarkedRead()
         return;
     } else {
 		qDebug() << "Story read: " << m_storyReadHash << " on feed " << m_storyReadId;
+		if (m_feedsData[m_storyReadId].unread > 0) {
+			m_feedsData[m_storyReadId].unread--;
+		}
 		emit storyRead(m_storyReadId, m_storyReadHash);
 	}
 }

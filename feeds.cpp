@@ -113,8 +113,6 @@ void Feeds::entriesFromFolder(const NewsBlurConnection::Folder &folder)
 		entry.unread = feeds[feed].unread;
 
 		m_list.append(entry);
-
-		qDebug() << "\tfeed name" << feeds[feed].name;
 	}
 }
 
