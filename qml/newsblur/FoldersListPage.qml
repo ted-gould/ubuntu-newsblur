@@ -136,19 +136,16 @@ Page {
 
 					SlotsLayout.position: SlotsLayout.Trailing
 
-					Rectangle {
-						anchors.fill: parent
-						color: UbuntuColors.warmGrey
+					backgroundColor: UbuntuColors.warmGrey
 
-						Text {
-							anchors {
-								verticalCenter: parent.verticalCenter
-								horizontalCenter: parent.horizontalCenter
-							}
-							text: unread
-							color: UbuntuColors.porcelain
-							font.bold: true
+					Text {
+						anchors {
+							verticalCenter: parent.verticalCenter
+							horizontalCenter: parent.horizontalCenter
 						}
+						text: unread
+						color: UbuntuColors.porcelain
+						font.bold: true
 					}
 				}
 
