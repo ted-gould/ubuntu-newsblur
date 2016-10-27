@@ -90,6 +90,11 @@ Page {
 		anchors.right: story.right
 		anchors.left: story.left
 
+		anchors.topMargin: webview.url ? 0 : units.gu(2)
+		anchors.bottomMargin: anchors.topMargin
+		anchors.leftMargin: anchors.topMargin
+		anchors.rightMargin: anchors.topMargin
+
 		Component.onCompleted: {
 			if (story.storyContent != "") {
 				loadHtml(story.storyContent)
