@@ -138,7 +138,8 @@ void NewsBlurConnection::fetchFeeds()
 {
     qDebug() << "fetching feeds...";
     QNetworkRequest request;
-    request.setUrl(QUrl(m_baseurl + "/reader/feeds"));
+	// TODO: Remove the update to a second call in the future
+    request.setUrl(QUrl(m_baseurl + "/reader/feeds?update_counts=true"));
 
     QNetworkReply *reply = m_nam->get(request);
     connect(reply, &QNetworkReply::finished, this, &NewsBlurConnection::feedsFetched);
