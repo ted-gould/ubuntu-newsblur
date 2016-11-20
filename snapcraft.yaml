@@ -6,15 +6,19 @@ description: Client to read all your news from all over the Internet
 parts:
   newsblur:
     plugin: cmake
+    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DCMAKE_BUILD_TYPE=Release]
     source: .
+    after: [desktop-qt5]
+    stage-packages:
+      - qml-module-qtquick2
+      - qml-module-ubuntu-components
+      - qml-module-ubuntu-web
+      - qtdeclarative5-u1db1.0
+      - ubuntu-ui-toolkit-theme
+      - ubuntu-ui-toolkit-tools
 
 apps:
-  newsblur:
-    command: bin/newsblur
-    plugs: ["appman", "network-client"]
+  ubuntu-newsblur:
+    command: desktop-launch ${SNAP}/usr/bin/newsblur
+    plugs: ["unity7", "network-client"]
 
-plugs:
-  appman:
-    type: application-manager
-    icon: newsblur-suru-logo.svg
-    title: Newsblur

@@ -5,4 +5,4 @@ Type=Application
 Terminal=false
 Name=Newsblur
 Exec=newsblur
-Icon=newsblur-suru-logo.svg
+Icon=${SNAP}/usr/newsblur-suru-logo.svg
