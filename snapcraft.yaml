@@ -20,5 +20,5 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/usr/bin/newsblur
-    plugs: ["unity7", "network-client"]
+    plugs: ["unity7", "network", "opengl", "browser-support"]
 
