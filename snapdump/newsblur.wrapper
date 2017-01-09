@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export OXIDE_NO_SANDBOX=1
+
+exec ${SNAP}/usr/bin/newsblur $@

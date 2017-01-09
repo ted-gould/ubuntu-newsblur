@@ -149,6 +149,10 @@ void NewsBlurConnection::feedsFetched()
 {
     qDebug() << "got feeds reply";
     QNetworkReply *reply = static_cast<QNetworkReply*>(sender());
+	if (reply == NULL) {
+		qWarning() << "Feeds with no reply object";
+		return;
+	}
     if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "Error fetching feeds" << reply->errorString();
         return;
@@ -167,6 +171,10 @@ void NewsBlurConnection::feedsFetched()
 	QVariantList foldersList = variantfeeds.value("folders").toList();
 	foreach (const QVariant &folderEntry, foldersList) {
 		QVariantMap folderMap = folderEntry.toMap();
+		if (folderMap.empty()) {
+			continue;
+		}
+
 		QString name = folderMap.keys().first();
 		QVariantList feedsList = folderMap.values().first().toList();
 		QList<int> feedsVect;
@@ -195,6 +203,7 @@ void NewsBlurConnection::feedsFetched()
 		m_feedsData.insert(feed.id, feed);
 	}
 
+	qDebug() << "Feeds Update Sent";
     emit feedsUpdated();
 }
 

@@ -3,22 +3,30 @@ version: 0.1
 summary: Newsblur Client for Ubuntu Devices
 description: Client to read all your news from all over the Internet
 
+grade: devel
+confinement: strict
+
 parts:
   newsblur:
     plugin: cmake
-    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DCMAKE_BUILD_TYPE=Release]
+    configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DCMAKE_BUILD_TYPE=Debug]
     source: .
-    after: [desktop-qt5]
-    stage-packages:
-      - qml-module-qtquick2
-      - qml-module-ubuntu-components
-      - qml-module-ubuntu-web
-      - qtdeclarative5-u1db1.0
-      - ubuntu-ui-toolkit-theme
-      - ubuntu-ui-toolkit-tools
+    after: [desktop-ubuntu-app-platform]
+  snapdump:
+    plugin: dump
+    source: snapdump
 
 apps:
   ubuntu-newsblur:
-    command: desktop-launch ${SNAP}/usr/bin/newsblur
-    plugs: ["unity7", "network", "opengl", "browser-support"]
+    command: desktop-launch ${SNAP}/newsblur.wrapper
+    plugs: [unity7, network, network-bind, opengl, platform, browser-sandbox]
 
+plugs:
+  platform:
+    interface: content
+    content: ubuntu-app-platform1
+    default-provider: ubuntu-app-platform
+    target: ubuntu-app-platform
+  browser-sandbox:
+    interface: browser-support
+    allow-sandbox: true
