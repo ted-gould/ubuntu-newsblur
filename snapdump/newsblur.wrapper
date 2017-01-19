@@ -1,5 +1,6 @@
 #!/bin/sh
 
 export OXIDE_NO_SANDBOX=1
+export QT_QPA_PLATFORM=ubuntumirclient
 
 exec ${SNAP}/usr/bin/newsblur $@
