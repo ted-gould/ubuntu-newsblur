@@ -23,6 +23,8 @@ parts:
   snapdump:
     plugin: dump
     source: snapdump
+    snap:
+      - -ubuntu-app-platform/.gitignore
 
 apps:
   ubuntu-newsblur:
