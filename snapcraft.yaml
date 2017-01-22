@@ -11,7 +11,8 @@ parts:
     plugin: cmake
     configflags: [-DCMAKE_INSTALL_PREFIX=/usr, -DCMAKE_BUILD_TYPE=Debug]
     source: .
-    after: [desktop-ubuntu-app-platform]
+#    after: [desktop-ubuntu-app-platform]
+    after: [desktop-qt5]
     build-packages:
       - build-essential
       - cmake
@@ -20,6 +21,8 @@ parts:
       - python3
       - qtbase5-dev
       - qtdeclarative5-dev
+    stage-packages:
+      - qtubuntu-desktop
   snapdump:
     plugin: dump
     source: snapdump
@@ -29,13 +32,13 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/newsblur.wrapper
-    plugs: [unity8, network, network-bind, opengl, platform, browser-sandbox]
+    plugs: [unity8, network, network-bind, opengl, browser-sandbox]
 
 plugs:
-  platform:
-    interface: content
-    content: ubuntu-app-platform1
-    default-provider: ubuntu-app-platform
-    target: ubuntu-app-platform
+#  platform:
+#    interface: content
+#    content: ubuntu-app-platform1
+#    default-provider: ubuntu-app-platform
+#    target: ubuntu-app-platform
   browser-sandbox:
     interface: browser-support
