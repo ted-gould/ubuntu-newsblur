@@ -57,7 +57,7 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/newsblur.wrapper
-    plugs: [unity8, network, network-bind, opengl, browser-sandbox]
+    plugs: [mir, unity8, network, network-bind, opengl, browser-sandbox]
 
 plugs:
   browser-sandbox:
