@@ -3,4 +3,6 @@
 export OXIDE_NO_SANDBOX=1
 export QT_QPA_PLATFORM=ubuntumirclient
 
+export LD_LIBRARY_PATH=${SNAP}/mirlibs:${LD_LIBRARY_PATH}
+
 exec ${SNAP}/usr/bin/newsblur $@
