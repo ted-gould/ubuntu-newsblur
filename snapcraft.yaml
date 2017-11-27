@@ -46,8 +46,6 @@ parts:
   snapdump:
     plugin: dump
     source: snapdump
-    snap:
-      - -mirlibs/.gitignore
   desktoplauncher:
     source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
     source-subdir: qt
@@ -59,14 +57,9 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/newsblur.wrapper
-    plugs: [mir, mirlibs, unity8, network, network-bind, opengl, browser-sandbox]
+    plugs: [unity8, network, network-bind, opengl, browser-sandbox]
 
 plugs:
   browser-sandbox:
     interface: browser-support
-  mirlibs:
-    interface: content
-    content: mir0
-    default-provider: mir-libs
-    target: mirlibs
 
