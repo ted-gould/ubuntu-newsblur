@@ -21,7 +21,6 @@ parts:
       - qtdeclarative5-dev
     stage-packages:
       - qtubuntu-desktop
-      - mir-client-platform-mesa5
       - qtdeclarative5-u1db1.0
       - qml-module-ubuntu-components
       - qml-module-ubuntu-web
@@ -35,14 +34,7 @@ parts:
       - libqt5svg5 # for loading icon themes which are svg
       - appmenu-qt5
       - locales-all
-    snap:
-      - -usr/share/doc
-      - -usr/share/icons
-      - -usr/share/themes
-      - -usr/lib/locale
-      - -usr/lib/*/*gtk*
-      - -usr/lib/*/*gdk*
-      - -usr/lib/*/*gio*
+      - suru-icon-theme
   snapdump:
     plugin: dump
     source: snapdump
@@ -57,7 +49,7 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/newsblur.wrapper
-    plugs: [unity8, network, network-bind, opengl, browser-sandbox]
+    plugs: [unity7, x11, network, network-bind, opengl, browser-sandbox]
 
 plugs:
   browser-sandbox:
