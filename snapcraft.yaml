@@ -35,6 +35,7 @@ parts:
       - appmenu-qt5
       - locales-all
       - suru-icon-theme
+      - qtwayland5
   snapdump:
     plugin: dump
     source: snapdump
@@ -49,7 +50,7 @@ parts:
 apps:
   ubuntu-newsblur:
     command: desktop-launch ${SNAP}/newsblur.wrapper
-    plugs: [unity7, x11, network, network-bind, opengl, browser-sandbox]
+    plugs: [unity7, x11, network, network-bind, opengl, browser-sandbox, wayland, upower-observe]
 
 plugs:
   browser-sandbox:
